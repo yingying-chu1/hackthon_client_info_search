@@ -60,7 +60,7 @@ class Client(Base):
     
     # Metadata and tracking
     tags = Column(JSON, default=list)  # Flexible tagging system
-    metadata = Column(JSON, default=dict)  # Additional metadata
+    extra_metadata = Column(JSON, default=dict)  # Additional metadata
     last_contact_date = Column(DateTime)
     next_follow_up = Column(DateTime)
     
@@ -101,7 +101,7 @@ class ClientInteraction(Base):
     
     # Metadata
     tags = Column(JSON, default=list)
-    metadata = Column(JSON, default=dict)
+    extra_metadata = Column(JSON, default=dict)
     
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -143,7 +143,7 @@ class ClientDocument(Base):
     
     # Metadata
     tags = Column(JSON, default=list)
-    metadata = Column(JSON, default=dict)
+    extra_metadata = Column(JSON, default=dict)
     
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -159,7 +159,7 @@ class Document(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False, index=True)
     content = Column(Text, nullable=False)
-    metadata = Column(JSON, default=dict)
+    extra_metadata = Column(JSON, default=dict)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
