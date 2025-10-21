@@ -19,8 +19,7 @@ class OpenAIService:
         if not self.api_key:
             print("Warning: OPENAI_API_KEY not set. OpenAI functionality will be limited.")
         else:
-            openai.api_key = self.api_key
-            self.client = openai
+            self.client = openai.OpenAI(api_key=self.api_key)
         
         # Define available functions
         self.functions = {
@@ -133,20 +132,21 @@ class OpenAIService:
             function_def = self.functions[function_name]
             
             # Make API call
-            response = await self.client.ChatCompletion.acreate(
+            response = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
-                functions=[function_def],
-                function_call={"name": function_name},
+                tools=[{"type": "function", "function": function_def}],
+                tool_choice={"type": "function", "function": {"name": function_name}},
                 temperature=0.1
             )
             
             # Extract function call result
             message = response.choices[0].message
             
-            if message.function_call:
-                function_name_called = message.function_call.name
-                function_args = json.loads(message.function_call.arguments)
+            if message.tool_calls:
+                tool_call = message.tool_calls[0]
+                function_name_called = tool_call.function.name
+                function_args = json.loads(tool_call.function.arguments)
                 
                 return {
                     "function_name": function_name_called,
@@ -183,11 +183,11 @@ class OpenAIService:
                 functions_to_use = list(self.functions.values())
             
             # Make API call
-            response = await self.client.ChatCompletion.acreate(
+            response = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
-                functions=functions_to_use,
-                function_call="auto",
+                tools=[{"type": "function", "function": func} for func in functions_to_use],
+                tool_choice="auto",
                 temperature=0.7
             )
             
@@ -198,10 +198,11 @@ class OpenAIService:
                 "function_call": None
             }
             
-            if message.function_call:
+            if message.tool_calls:
+                tool_call = message.tool_calls[0]
                 result["function_call"] = {
-                    "name": message.function_call.name,
-                    "arguments": json.loads(message.function_call.arguments)
+                    "name": tool_call.function.name,
+                    "arguments": json.loads(tool_call.function.arguments)
                 }
             
             return result
@@ -223,7 +224,7 @@ class OpenAIService:
             if not self.client:
                 raise Exception("OpenAI client not initialized")
             
-            response = await self.client.Embedding.acreate(
+            response = self.client.embeddings.create(
                 model="text-embedding-ada-002",
                 input=text
             )
@@ -239,7 +240,7 @@ class OpenAIService:
             if not self.client:
                 raise Exception("OpenAI client not initialized")
             
-            response = await self.client.Moderation.acreate(input=text)
+            response = self.client.moderations.create(input=text)
             
             return {
                 "flagged": response.results[0].flagged,
