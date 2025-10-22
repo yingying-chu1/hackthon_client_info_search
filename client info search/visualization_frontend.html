@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Assessment Visualizations</title>
+    <title>Assessment Visualizations - Grow Therapy</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
@@ -13,45 +13,190 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #F8F7F5;
             min-height: 100vh;
-            padding: 20px;
+            display: flex;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: #F8F7F5;
+            border-right: 1px solid #E5E5E5;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
-        .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 30px;
+        .logo {
+            padding: 0 20px 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #000000;
+            border-bottom: 1px solid #E5E5E5;
+            margin-bottom: 20px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #666666;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            margin: 2px 0;
+        }
+
+        .nav-item:hover {
+            background: #F0F0F0;
+            color: #000000;
+        }
+
+        .nav-item.active {
+            background: #8A2BE2;
+            color: #FFFFFF;
+            border-left-color: #8A2BE2;
+        }
+
+        .nav-item i {
+            margin-right: 12px;
+            width: 20px;
             text-align: center;
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            font-weight: 300;
+        /* Profile Section at Bottom */
+        .profile-section {
+            margin-top: auto;
+            padding: 20px;
+            border-top: 1px solid #E5E5E5;
         }
 
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .controls {
-            padding: 20px 30px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
+        .profile-info {
             display: flex;
-            gap: 15px;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #8A2BE2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .profile-details {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: #000000;
+            font-size: 0.9rem;
+        }
+
+        .profile-role {
+            color: #666666;
+            font-size: 0.8rem;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: #F8F7F5;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: #F8F7F5;
+            padding: 30px;
+            border-bottom: 1px solid #E5E5E5;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: #8A2BE2;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #000000;
+            margin: 10px 0;
+        }
+
+        .page-subtitle {
+            color: #666666;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 30px;
+        }
+
+        .content-card {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #E5E5E5;
+            transition: box-shadow 0.2s ease;
+            margin-bottom: 20px;
+        }
+
+        .content-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: flex;
+            gap: 20px;
             align-items: center;
             flex-wrap: wrap;
         }
@@ -59,547 +204,343 @@
         .control-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
         }
 
-        .control-group label {
-            font-weight: 600;
-            color: #495057;
+        .control-label {
             font-size: 0.9rem;
+            font-weight: 600;
+            color: #000000;
         }
 
-        select, button {
-            padding: 10px 15px;
-            border: 2px solid #e9ecef;
+        .control-select {
+            padding: 10px 12px;
+            border: 1px solid #E5E5E5;
             border-radius: 8px;
-            font-size: 1rem;
-            background: white;
+            background: #FFFFFF;
+            color: #000000;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: border-color 0.2s ease;
         }
 
-        select:focus, button:focus {
+        .control-select:focus {
             outline: none;
-            border-color: #4facfe;
-            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+            border-color: #8A2BE2;
         }
 
-        button {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border: none;
-            font-weight: 600;
-            padding: 12px 25px;
+        .control-select option {
+            color: #000000;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
-        }
-
-        .charts-container {
-            padding: 30px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .chart-section {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        .chart-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
+        /* Chart Container */
         .chart-container {
             position: relative;
             height: 400px;
-            margin-bottom: 20px;
+            margin: 20px 0;
         }
 
-        .question-selector {
+        .chart-container.large {
+            height: 500px;
+        }
+
+        /* Question Analysis */
+        .question-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
             margin-top: 20px;
         }
 
-        .question-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .question-btn {
-            padding: 12px 15px;
-            background: white;
-            border: 2px solid #e9ecef;
+        .question-card {
+            background: #FFFFFF;
+            border: 1px solid #E5E5E5;
             border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .question-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            color: #666666;
             font-size: 0.9rem;
-            font-weight: 500;
+            margin-bottom: 15px;
+            line-height: 1.4;
         }
 
-        .question-btn:hover {
-            border-color: #4facfe;
-            background: #f0f8ff;
+        .question-chart {
+            height: 250px;
+            position: relative;
+            width: 100%;
         }
 
-        .question-btn.active {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            border-color: transparent;
-        }
-
+        /* Summary Stats */
         .summary-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .stat-card {
-            background: white;
+            background: #FFFFFF;
+            border: 1px solid #E5E5E5;
+            border-radius: 8px;
             padding: 20px;
-            border-radius: 12px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-left: 4px solid #4facfe;
         }
 
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #4facfe;
+            color: #8A2BE2;
             margin-bottom: 5px;
         }
 
         .stat-label {
-            color: #6c757d;
+            color: #666666;
             font-size: 0.9rem;
             font-weight: 500;
         }
 
-        .loading {
-            text-align: center;
-            padding: 50px;
-            color: #6c757d;
-            font-size: 1.1rem;
+        .stat-trend {
+            font-size: 0.8rem;
+            margin-top: 5px;
         }
 
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border: 1px solid #f5c6cb;
+        .stat-trend.positive {
+            color: #28A745;
+        }
+
+        .stat-trend.negative {
+            color: #DC3545;
+        }
+
+        .stat-trend.neutral {
+            color: #666666;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .question-analysis {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
-            .charts-container {
-                grid-template-columns: 1fr;
+            .header {
+                padding: 15px 20px;
+            }
+
+            .content-area {
                 padding: 20px;
             }
-            
+
             .controls {
                 flex-direction: column;
                 align-items: stretch;
             }
-            
-            .header h1 {
-                font-size: 2rem;
+
+            .summary-stats {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="logo">growtherapy</div>
+        
+        <nav>
+            <a href="#" class="nav-item">
+                <i>🏠</i>
+                Dashboard
+            </a>
+            <a href="#" class="nav-item">
+                <i>📊</i>
+                Insights
+            </a>
+            <a href="#" class="nav-item">
+                <i>💬</i>
+                Messages
+            </a>
+            <a href="#" class="nav-item active">
+                <i>👤</i>
+                Clients
+            </a>
+            <a href="#" class="nav-item">
+                <i>📅</i>
+                Appointments
+            </a>
+            <a href="#" class="nav-item">
+                <i>💰</i>
+                Payouts
+            </a>
+            <a href="#" class="nav-item">
+                <i>⚙️</i>
+                Profile
+            </a>
+            <a href="#" class="nav-item">
+                <i>👥</i>
+                Community
+                <i class="external-icon">↗️</i>
+            </a>
+        </nav>
+
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <div class="profile-info">
+                <div class="profile-avatar">AE</div>
+                <div class="profile-details">
+                    <div class="profile-name">Anna Eaglin</div>
+                    <div class="profile-role">Therapist</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Header -->
         <div class="header">
-            <h1>📊 Patient Assessment Visualizations</h1>
-            <p>Interactive PHQ9 and GAD7 Analysis Dashboard</p>
+            <div class="header-top">
+                <a href="treatment_tab.html" class="back-link">
+                    <i>←</i>
+                    Back to Treatment
+                </a>
+            </div>
+            
+            <h1 class="page-title">Assessment Visualizations</h1>
+            <p class="page-subtitle">Analyze patient progress with detailed PHQ9 and GAD7 insights</p>
         </div>
 
-        <div class="controls">
-            <div class="control-group">
-                <label for="patientSelect">Patient ID:</label>
-                <select id="patientSelect">
-                    <option value="789012">Patient 789012</option>
-                </select>
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Controls Card -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Visualization Controls</h2>
+                </div>
+                
+                <div class="controls">
+                    <div class="control-group">
+                        <label class="control-label">Assessment Type</label>
+                        <select id="assessmentSelect" class="control-select">
+                            <option value="phq9">PHQ9 (Depression)</option>
+                            <option value="gad7">GAD7 (Anxiety)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label">View Type</label>
+                        <select id="viewTypeSelect" class="control-select">
+                            <option value="overall">Overall Progress</option>
+                            <option value="questions">Individual Questions</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="control-group">
-                <label for="assessmentSelect">Assessment Type:</label>
-                <select id="assessmentSelect">
-                    <option value="phq9">PHQ9 (Depression)</option>
-                    <option value="gad7">GAD7 (Anxiety)</option>
-                </select>
-            </div>
-            <button onclick="loadVisualization()">📈 Load Visualization</button>
-        </div>
 
-        <div id="content">
-            <div class="loading">
-                Click "Load Visualization" to view assessment data
+            <!-- Summary Stats -->
+            <div class="summary-stats" id="summaryStats">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+
+            <!-- Main Chart -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title" id="chartTitle">Overall Progress</h2>
+                </div>
+                <div class="chart-container large">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Question Analysis -->
+            <div class="content-card" id="questionAnalysisCard" style="display: none;">
+                <div class="card-header">
+                    <h2 class="card-title">Individual Question Analysis</h2>
+                </div>
+                <div class="question-analysis" id="questionAnalysis">
+                    <!-- Question cards will be populated by JavaScript -->
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        let currentChart = null;
-        let currentQuestionChart = null;
-        let assessmentData = null;
+        const API_BASE = 'http://localhost:8000';
+        let mainChart = null;
+        let questionCharts = [];
 
-        async function loadVisualization() {
-            const patientId = document.getElementById('patientSelect').value;
-            const assessmentType = document.getElementById('assessmentSelect').value;
-            
-            const contentDiv = document.getElementById('content');
-            contentDiv.innerHTML = '<div class="loading">Loading assessment data...</div>';
-
-            try {
-                // Load assessment data
-                const response = await fetch(`http://localhost:8000/${assessmentType}-analysis/${patientId}`);
-                const data = await response.json();
-
-                if (data.error) {
-                    contentDiv.innerHTML = `<div class="error">Error: ${data.error}</div>`;
-                    return;
-                }
-
-                assessmentData = data;
-                renderVisualization(data, assessmentType);
-            } catch (error) {
-                contentDiv.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
+        // Sample data for demonstration
+        const sampleData = {
+            phq9: {
+                questions: [
+                    "Little interest or pleasure in doing things",
+                    "Feeling down, depressed, or hopeless",
+                    "Trouble falling or staying asleep, or sleeping too much",
+                    "Feeling tired or having little energy",
+                    "Poor appetite or overeating",
+                    "Feeling bad about yourself",
+                    "Trouble concentrating on things",
+                    "Moving or speaking slowly",
+                    "Thoughts that you would be better off dead"
+                ],
+                scores: [17, 15, 12, 9, 7, 5],
+                dates: ['2024-01-15', '2024-02-15', '2024-03-15', '2024-04-15', '2024-05-15', '2024-06-15'],
+                questionScores: [
+                    [3, 2, 2, 1, 1, 1], // Question 1
+                    [3, 3, 2, 1, 1, 1], // Question 2
+                    [2, 2, 2, 1, 1, 0], // Question 3
+                    [3, 2, 2, 1, 1, 1], // Question 4
+                    [2, 2, 1, 1, 1, 1], // Question 5
+                    [2, 2, 1, 1, 1, 0], // Question 6
+                    [1, 1, 1, 1, 1, 1], // Question 7
+                    [1, 1, 1, 1, 1, 0], // Question 8
+                    [0, 0, 0, 0, 0, 0]  // Question 9
+                ]
+            },
+            gad7: {
+                questions: [
+                    "Feeling nervous, anxious, or on edge",
+                    "Not being able to stop or control worrying",
+                    "Worrying too much about different things",
+                    "Trouble relaxing",
+                    "Being so restless that it's hard to sit still",
+                    "Becoming easily annoyed or irritable",
+                    "Feeling afraid as if something awful might happen"
+                ],
+                scores: [14, 12, 10, 8, 6, 4],
+                dates: ['2024-01-15', '2024-02-15', '2024-03-15', '2024-04-15', '2024-05-15', '2024-06-15'],
+                questionScores: [
+                    [3, 2, 2, 1, 1, 1], // Question 1
+                    [3, 3, 2, 1, 1, 1], // Question 2
+                    [2, 2, 2, 1, 1, 0], // Question 3
+                    [3, 2, 2, 1, 1, 1], // Question 4
+                    [2, 2, 1, 1, 1, 1], // Question 5
+                    [1, 1, 1, 1, 1, 1], // Question 6
+                    [0, 0, 0, 0, 0, 0]  // Question 7
+                ]
             }
-        }
-
-        function renderVisualization(data, assessmentType) {
-            const contentDiv = document.getElementById('content');
-            
-            // Calculate summary statistics
-            const baseline = data.assessments[0];
-            const latest = data.assessments[data.assessments.length - 1];
-            const totalChange = latest.total_score - baseline.total_score;
-            const improvementPercent = Math.round((Math.abs(totalChange) / baseline.total_score) * 100);
-
-            const questions = assessmentType === 'phq9' ? 
-                {
-                    '1': 'Little interest or pleasure in doing things',
-                    '2': 'Feeling down, depressed, or hopeless',
-                    '3': 'Trouble falling or staying asleep, or sleeping too much',
-                    '4': 'Feeling tired or having little energy',
-                    '5': 'Poor appetite or overeating',
-                    '6': 'Feeling bad about yourself - or that you are a failure',
-                    '7': 'Trouble concentrating on things',
-                    '8': 'Moving or speaking slowly or being fidgety',
-                    '9': 'Thoughts of hurting yourself'
-                } : {
-                    '1': 'Feeling nervous, anxious, or on edge',
-                    '2': 'Not being able to stop or control worrying',
-                    '3': 'Worrying too much about different things',
-                    '4': 'Trouble relaxing',
-                    '5': 'Being so restless that it\'s hard to sit still',
-                    '6': 'Becoming easily annoyed or irritable',
-                    '7': 'Feeling afraid as if something awful might happen'
-                };
-
-            contentDiv.innerHTML = `
-                <div class="summary-stats">
-                    <div class="stat-card">
-                        <div class="stat-value">${baseline.total_score}</div>
-                        <div class="stat-label">Baseline Score<br>(${baseline.date})</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${latest.total_score}</div>
-                        <div class="stat-label">Latest Score<br>(${latest.date})</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${totalChange < 0 ? '-' : '+'}${Math.abs(totalChange)}</div>
-                        <div class="stat-label">Point Change<br>${totalChange < 0 ? 'Improvement' : 'Increase'}</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${improvementPercent}%</div>
-                        <div class="stat-label">Change Rate</div>
-                    </div>
-                </div>
-
-                <div class="charts-container">
-                    <div class="chart-section">
-                        <div class="chart-title">📈 Overall Score Trend</div>
-                        <div class="chart-container">
-                            <canvas id="overallChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="chart-section">
-                        <div class="chart-title">🎯 Individual Question Analysis</div>
-                        <div class="chart-container">
-                            <canvas id="questionChart"></canvas>
-                        </div>
-                        <div class="question-selector">
-                            <div style="margin-bottom: 15px; font-weight: 600; color: #495057;">Select Question to Analyze:</div>
-                            <div class="question-grid" id="questionGrid"></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            // Render overall trend chart
-            renderOverallChart(data.assessments, assessmentType);
-            
-            // Render question selector
-            renderQuestionSelector(questions, data.question_changes);
-            
-            // Render initial question chart (first question)
-            const firstQuestion = Object.keys(questions)[0];
-            renderQuestionChart(firstQuestion, questions[firstQuestion], data.question_changes[firstQuestion], data.assessments);
-        }
-
-        function renderOverallChart(assessments, assessmentType) {
-            const ctx = document.getElementById('overallChart').getContext('2d');
-            
-            if (currentChart) {
-                currentChart.destroy();
-            }
-
-            const labels = assessments.map(a => a.date);
-            const scores = assessments.map(a => a.total_score);
-
-            currentChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: `${assessmentType.toUpperCase()} Total Score`,
-                        data: scores,
-                        borderColor: '#4facfe',
-                        backgroundColor: 'rgba(79, 172, 254, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#4facfe',
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 2,
-                        pointRadius: 6,
-                        pointHoverRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            labels: {
-                                usePointStyle: true,
-                                font: {
-                                    size: 14,
-                                    weight: 'bold'
-                                }
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(0,0,0,0.8)',
-                            titleColor: 'white',
-                            bodyColor: 'white',
-                            borderColor: '#4facfe',
-                            borderWidth: 1,
-                            callbacks: {
-                                title: function(context) {
-                                    return `Assessment Date: ${context[0].label}`;
-                                },
-                                label: function(context) {
-                                    return `${assessmentType.toUpperCase()} Score: ${context.parsed.y}`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: assessmentType === 'phq9' ? 27 : 21,
-                            grid: {
-                                color: 'rgba(0,0,0,0.1)'
-                            },
-                            ticks: {
-                                font: {
-                                    size: 12
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(0,0,0,0.1)'
-                            },
-                            ticks: {
-                                font: {
-                                    size: 12
-                                }
-                            }
-                        }
-                    },
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    }
-                }
-            });
-        }
-
-        function renderQuestionSelector(questions, questionChanges) {
-            const grid = document.getElementById('questionGrid');
-            grid.innerHTML = '';
-
-            Object.entries(questions).forEach(([qNum, description]) => {
-                const change = questionChanges[qNum];
-                const changeText = change ? 
-                    (change.change < 0 ? `↓${Math.abs(change.change)}` : 
-                     change.change > 0 ? `↑${change.change}` : '→0') : 'N/A';
-                
-                const changeColor = change ? 
-                    (change.change < 0 ? '#28a745' : 
-                     change.change > 0 ? '#dc3545' : '#6c757d') : '#6c757d';
-
-                const button = document.createElement('div');
-                button.className = 'question-btn';
-                button.innerHTML = `
-                    <div style="font-weight: 600; margin-bottom: 5px;">Q${qNum}</div>
-                    <div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">${description.substring(0, 30)}...</div>
-                    <div style="font-size: 0.9rem; font-weight: 600; color: ${changeColor};">${changeText}</div>
-                `;
-                
-                button.onclick = () => {
-                    // Remove active class from all buttons
-                    document.querySelectorAll('.question-btn').forEach(btn => btn.classList.remove('active'));
-                    // Add active class to clicked button
-                    button.classList.add('active');
-                    // Render question chart
-                    renderQuestionChart(qNum, description, change, assessmentData.assessments);
-                };
-
-                grid.appendChild(button);
-            });
-
-            // Activate first question by default
-            if (grid.firstChild) {
-                grid.firstChild.classList.add('active');
-            }
-        }
-
-        function renderQuestionChart(questionNum, description, questionData, assessments) {
-            const ctx = document.getElementById('questionChart').getContext('2d');
-            
-            if (currentQuestionChart) {
-                currentQuestionChart.destroy();
-            }
-
-            if (!questionData) {
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                ctx.font = '16px Arial';
-                ctx.fillStyle = '#6c757d';
-                ctx.textAlign = 'center';
-                ctx.fillText('No data available for this question', ctx.canvas.width / 2, ctx.canvas.height / 2);
-                return;
-            }
-
-            const labels = assessments.map(a => a.date);
-            const scores = assessments.map(a => a.questions[questionNum] || 0);
-
-            const changeColor = questionData.change < 0 ? '#28a745' : 
-                              questionData.change > 0 ? '#dc3545' : '#6c757d';
-
-            currentQuestionChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: `Question ${questionNum}`,
-                        data: scores,
-                        borderColor: changeColor,
-                        backgroundColor: changeColor + '20',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: changeColor,
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 2,
-                        pointRadius: 6,
-                        pointHoverRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: description,
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            },
-                            color: '#495057'
-                        },
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(0,0,0,0.8)',
-                            titleColor: 'white',
-                            bodyColor: 'white',
-                            borderColor: changeColor,
-                            borderWidth: 1,
-                            callbacks: {
-                                title: function(context) {
-                                    return `Assessment Date: ${context[0].label}`;
-                                },
-                                label: function(context) {
-                                    return `Question ${questionNum} Score: ${context.parsed.y}`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 3,
-                            ticks: {
-                                stepSize: 1,
-                                font: {
-                                    size: 12
-                                }
-                            },
-                            grid: {
-                                color: 'rgba(0,0,0,0.1)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(0,0,0,0.1)'
-                            },
-                            ticks: {
-                                font: {
-                                    size: 12
-                                }
-                            }
-                        }
-                    },
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    }
-                }
-            });
-        }
+        };
 
         // Load initial visualization
         window.onload = function() {
@@ -613,6 +554,234 @@
             
             loadVisualization();
         };
+
+        // Event listeners
+        document.getElementById('assessmentSelect').addEventListener('change', loadVisualization);
+        document.getElementById('viewTypeSelect').addEventListener('change', loadVisualization);
+
+        function loadVisualization() {
+            const assessmentType = document.getElementById('assessmentSelect').value;
+            const viewType = document.getElementById('viewTypeSelect').value;
+            
+            updateSummaryStats(assessmentType);
+            
+            if (viewType === 'overall') {
+                showOverallChart(assessmentType);
+                hideQuestionAnalysis();
+            } else {
+                hideOverallChart();
+                showQuestionAnalysis(assessmentType);
+            }
+        }
+
+        function updateSummaryStats(assessmentType) {
+            const data = sampleData[assessmentType];
+            const latestScore = data.scores[data.scores.length - 1];
+            const previousScore = data.scores[data.scores.length - 2];
+            const change = latestScore - previousScore;
+            
+            const statsContainer = document.getElementById('summaryStats');
+            statsContainer.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${latestScore}</div>
+                    <div class="stat-label">Current Score</div>
+                    <div class="stat-trend ${change < 0 ? 'positive' : change > 0 ? 'negative' : 'neutral'}">
+                        ${change < 0 ? '↓' : change > 0 ? '↑' : '→'} ${Math.abs(change)} from last assessment
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${data.scores[0]}</div>
+                    <div class="stat-label">Baseline Score</div>
+                    <div class="stat-trend neutral">Initial assessment</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${Math.round(((data.scores[0] - latestScore) / data.scores[0]) * 100)}%</div>
+                    <div class="stat-label">Improvement</div>
+                    <div class="stat-trend positive">Better than baseline</div>
+                </div>
+            `;
+        }
+
+        function showOverallChart(assessmentType) {
+            const data = sampleData[assessmentType];
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            
+            if (mainChart) {
+                mainChart.destroy();
+            }
+            
+            mainChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.dates.map(date => new Date(date).toLocaleDateString()),
+                    datasets: [{
+                        label: `${assessmentType.toUpperCase()} Score`,
+                        data: data.scores,
+                        borderColor: '#8A2BE2',
+                        backgroundColor: 'rgba(138, 43, 226, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#000000',
+                                font: {
+                                    size: 14,
+                                    weight: '600'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: assessmentType === 'phq9' ? 27 : 21,
+                            ticks: {
+                                color: '#666666',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                color: '#E5E5E5'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#666666',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                color: '#E5E5E5'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            document.getElementById('chartTitle').textContent = `${assessmentType.toUpperCase()} Overall Progress`;
+        }
+
+        function hideOverallChart() {
+            if (mainChart) {
+                mainChart.destroy();
+                mainChart = null;
+            }
+        }
+
+        function showQuestionAnalysis(assessmentType) {
+            const data = sampleData[assessmentType];
+            const container = document.getElementById('questionAnalysis');
+            
+            // Clear existing charts
+            questionCharts.forEach(chart => chart.destroy());
+            questionCharts = [];
+            
+            container.innerHTML = '';
+            
+            data.questions.forEach((question, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                
+                const canvas = document.createElement('canvas');
+                canvas.id = `questionChart${index}`;
+                canvas.className = 'question-chart';
+                
+                questionCard.innerHTML = `
+                    <div class="question-title">Question ${index + 1}</div>
+                    <div class="question-text">${question}</div>
+                `;
+                questionCard.appendChild(canvas);
+                container.appendChild(questionCard);
+                
+                // Wait for DOM to be ready, then create chart
+                setTimeout(() => {
+                    const ctx = canvas.getContext('2d');
+                    const chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.dates.map(date => new Date(date).toLocaleDateString()),
+                            datasets: [{
+                                label: `Score`,
+                                data: data.questionScores[index],
+                                borderColor: '#8A2BE2',
+                                backgroundColor: 'rgba(138, 43, 226, 0.1)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4,
+                                pointBackgroundColor: '#8A2BE2',
+                                pointBorderColor: '#FFFFFF',
+                                pointBorderWidth: 2,
+                                pointRadius: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 3,
+                                    ticks: {
+                                        stepSize: 1,
+                                        color: '#666666',
+                                        font: {
+                                            size: 11
+                                        }
+                                    },
+                                    grid: {
+                                        color: '#E5E5E5',
+                                        drawBorder: false
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        color: '#666666',
+                                        font: {
+                                            size: 10
+                                        },
+                                        maxRotation: 45
+                                    },
+                                    grid: {
+                                        color: '#E5E5E5',
+                                        drawBorder: false
+                                    }
+                                }
+                            },
+                            elements: {
+                                point: {
+                                    hoverRadius: 6
+                                }
+                            }
+                        }
+                    });
+                    
+                    questionCharts.push(chart);
+                }, 100);
+            });
+            
+            document.getElementById('questionAnalysisCard').style.display = 'block';
+            document.getElementById('chartTitle').textContent = `${assessmentType.toUpperCase()} Individual Questions`;
+        }
+
+        function hideQuestionAnalysis() {
+            document.getElementById('questionAnalysisCard').style.display = 'none';
+            questionCharts.forEach(chart => chart.destroy());
+            questionCharts = [];
+        }
     </script>
 </body>
 </html>

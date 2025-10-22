@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Care Assistant - Grow Therapy Style</title>
+    <title>Treatment - Amy E - Grow Therapy</title>
     <style>
         * {
             margin: 0;
@@ -131,31 +131,6 @@
             border-bottom: 1px solid #E5E5E5;
         }
 
-        .dashboard-greeting {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        .greeting-icon {
-            width: 24px;
-            height: 24px;
-            background: #8A2BE2;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #FFFFFF;
-            font-size: 0.9rem;
-        }
-
-        .greeting-text {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #000000;
-        }
-
         .header-top {
             display: flex;
             justify-content: space-between;
@@ -204,6 +179,16 @@
         .action-btn:hover {
             background: #F8F7F5;
             border-color: #8A2BE2;
+        }
+
+        .action-btn.primary {
+            background: #8A2BE2;
+            color: #FFFFFF;
+            border-color: #8A2BE2;
+        }
+
+        .action-btn.primary:hover {
+            background: #7B26D1;
         }
 
         /* Navigation Tabs */
@@ -256,26 +241,15 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        .card-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .card-grid.single {
-            grid-template-columns: 1fr;
-        }
-
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .card-title {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #000000;
         }
@@ -309,61 +283,7 @@
             border-color: #8A2BE2;
         }
 
-        /* Notification Badge */
-        .notification-badge {
-            background: #FF6B35;
-            color: #FFFFFF;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        /* Task Cards */
-        .task-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #F0F0F0;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        .task-item:last-child {
-            border-bottom: none;
-        }
-
-        .task-item:hover {
-            background: #F8F7F5;
-            border-radius: 8px;
-            padding: 12px 8px;
-            margin: 0 -8px;
-        }
-
-        .task-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 12px;
-            color: #666666;
-        }
-
-        .task-content {
-            flex: 1;
-            font-size: 0.9rem;
-            color: #000000;
-        }
-
-        .task-arrow {
-            color: #666666;
-            font-size: 0.8rem;
-        }
-
-        /* Minimalist Chat Interface */
+        /* AI Assistant Chat Interface */
         .chat-container {
             background: #F8F7F5;
             border-radius: 12px;
@@ -406,8 +326,8 @@
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            min-height: 200px;
-            max-height: 400px;
+            min-height: 300px;
+            max-height: 500px;
             overflow-y: auto;
         }
 
@@ -582,90 +502,31 @@
             transform: translateY(0);
         }
 
-        /* Enhanced Message Styling */
-        .session-highlight {
-            background: #E8F5E8;
-            border-left: 4px solid #28A745;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
+        /* Treatment Progress Section */
+        .treatment-progress {
+            margin-bottom: 20px;
         }
 
-        .progress-indicators {
+        .progress-item {
             display: flex;
-            gap: 8px;
-            margin: 10px 0;
-            flex-wrap: wrap;
-        }
-
-        .progress-indicator {
-            background: #28A745;
-            color: #FFFFFF;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .session-summary {
-            background: #F8F7F5;
-            border: 1px solid #E5E5E5;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .welcome-message {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666666;
-        }
-
-        .welcome-message h3 {
-            margin-bottom: 15px;
-            color: #000000;
-            font-size: 1.3rem;
-        }
-
-        .welcome-message p {
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-
-        .example-queries {
-            background: #FFFFFF;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px solid #E5E5E5;
-        }
-
-        .example-queries h4 {
-            margin-bottom: 15px;
-            color: #000000;
-            font-size: 1rem;
-        }
-
-        .example-queries ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .example-queries li {
-            padding: 8px 0;
-            color: #666666;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
             border-bottom: 1px solid #F0F0F0;
         }
 
-        .example-queries li:last-child {
+        .progress-item:last-child {
             border-bottom: none;
         }
 
-        .example-queries li:before {
-            content: "💡 ";
-            margin-right: 8px;
+        .progress-label {
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .progress-value {
+            color: #666666;
+            font-size: 0.9rem;
         }
 
         /* Responsive Design */
@@ -708,7 +569,7 @@
         <div class="logo">growtherapy</div>
         
         <nav>
-            <a href="#" class="nav-item active">
+            <a href="#" class="nav-item">
                 <i>🏠</i>
                 Dashboard
             </a>
@@ -720,7 +581,7 @@
                 <i>💬</i>
                 Messages
             </a>
-            <a href="#" class="nav-item">
+            <a href="#" class="nav-item active">
                 <i>👤</i>
                 Clients
             </a>
@@ -759,13 +620,21 @@
     <div class="main-content">
         <!-- Header -->
         <div class="header">
-            <div class="dashboard-greeting">
-                <div class="greeting-icon">✏️</div>
-                <div class="greeting-text">Anna Eaglin, let's grow your practice</div>
+            <div class="header-top">
+                <a href="#" class="back-link">
+                    <i>←</i>
+                    Back to clients
+                </a>
+                <div class="header-actions">
+                    <button class="action-btn primary">Message client</button>
+                    <button class="action-btn">Actions ↓</button>
+                </div>
             </div>
             
+            <h1 class="client-name">Amy E</h1>
+            
             <div class="nav-tabs">
-                <a href="#" class="nav-tab">
+                <a href="client_overview.html" class="nav-tab">
                     <i>📁</i>
                     Overview
                 </a>
@@ -781,154 +650,103 @@
                     <i>📄</i>
                     Forms & Files
                 </a>
+                <a href="#" class="nav-tab">
+                    <i>💰</i>
+                    Billing
+                </a>
             </div>
         </div>
 
         <!-- Content Area -->
         <div class="content-area">
-            <!-- Dashboard Cards Grid -->
-            <div class="card-grid">
-                <!-- AI Assistant Card -->
-                <div class="content-card">
-                    <div class="card-header">
-                        <h2 class="card-title">AI Assistant</h2>
-                        <div class="view-toggles">
-                            <button class="toggle-btn active">💬</button>
-                            <button class="toggle-btn">📊</button>
-                        </div>
-                    </div>
-
-                    <!-- Visualization Section -->
-                    <div class="visualization-section">
-                        <h4>📊 Assessment Visualizations</h4>
-                        <div class="viz-buttons">
-                            <button class="viz-btn" onclick="openVisualizations()">📈 Open Visualizations</button>
-                            <button class="viz-btn" onclick="openPHQ9Viz()">📊 PHQ9 Analysis</button>
-                            <button class="viz-btn" onclick="openGAD7Viz()">📊 GAD7 Analysis</button>
-                        </div>
-                    </div>
-
-                    <!-- Minimalist Chat Interface -->
-                    <div class="chat-container">
-                        <div class="chat-header">
-                            <div class="chat-title">Client Assistant</div>
-                            <button class="close-btn">×</button>
-                        </div>
-
-                        <div class="chat-messages" id="chatMessages">
-                            <div class="message assistant">
-                                <div class="message-bubble">
-                                    Hello! I can help you query information about your clients. Feel free to ask any questions you have.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="loading" id="loadingIndicator">
-                            Analyzing your request...
-                        </div>
-
-                        <div class="quick-questions">
-                            <h4>Quick Questions:</h4>
-                            <div class="question-buttons">
-                                <button class="question-btn" onclick="askQuestion('Is the client doing better?')">Client progress</button>
-                                <button class="question-btn" onclick="askQuestion('What is the diagnosis?')">Diagnosis</button>
-                                <button class="question-btn" onclick="askQuestion('Tell me about recent sessions')">Recent sessions</button>
-                                <button class="question-btn" onclick="askQuestion('Have I introduced CBT to this client?')">CBT status</button>
-                            </div>
-                        </div>
-
-                        <div class="chat-input-container">
-                            <input 
-                                type="text" 
-                                class="chat-input" 
-                                id="messageInput" 
-                                placeholder="Ask about client data..."
-                                autocomplete="off"
-                            >
-                            <button class="send-btn" id="sendBtn" onclick="handleSubmit()">
-                                ✈️
-                            </button>
-                        </div>
+            <!-- AI Assistant Card - First Section -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">AI Assistant</h2>
+                    <div class="view-toggles">
+                        <button class="toggle-btn active">💬</button>
+                        <button class="toggle-btn">📊</button>
                     </div>
                 </div>
 
-                <!-- Tasks Card -->
-                <div class="content-card">
-                    <div class="card-header">
-                        <h2 class="card-title">Tasks</h2>
-                        <div class="notification-badge">6</div>
+                <!-- Visualization Section -->
+                <div class="visualization-section">
+                    <h4>📊 Assessment Visualizations</h4>
+                    <div class="viz-buttons">
+                        <button class="viz-btn" onclick="openVisualizations()">📈 Open Visualizations</button>
+                        <button class="viz-btn" onclick="openPHQ9Viz()">📊 PHQ9 Analysis</button>
+                        <button class="viz-btn" onclick="openGAD7Viz()">📊 GAD7 Analysis</button>
                     </div>
-                    
-                    <div class="task-item">
-                        <i class="task-icon">📅</i>
-                        <div class="task-content">Past due: Upgrade your calendar sync</div>
-                        <i class="task-arrow">→</i>
+                </div>
+
+                <!-- Minimalist Chat Interface -->
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-title">Client Assistant</div>
+                        <button class="close-btn">×</button>
                     </div>
-                    
-                    <div class="task-item">
-                        <i class="task-icon">💰</i>
-                        <div class="task-content">Submit invoices for 3 appointment(s) (1 expiring soon)</div>
-                        <i class="task-arrow">→</i>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message assistant">
+                            <div class="message-bubble">
+                                Hello! I can help you analyze Amy's treatment progress and provide clinical insights. Feel free to ask any questions about her therapy journey.
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="task-item">
-                        <i class="task-icon">📋</i>
-                        <div class="task-content">Follow up with 42 clients who need action</div>
-                        <i class="task-arrow">→</i>
+
+                    <div class="loading" id="loadingIndicator">
+                        Analyzing your request...
                     </div>
-                    
-                    <div class="task-item">
-                        <i class="task-icon">💳</i>
-                        <div class="task-content">Connect to Stripe</div>
-                        <i class="task-arrow">→</i>
+
+                    <div class="quick-questions">
+                        <h4>Quick Questions:</h4>
+                        <div class="question-buttons">
+                            <button class="question-btn" onclick="askQuestion('Is Amy doing better?')">Client progress</button>
+                            <button class="question-btn" onclick="askQuestion('What is Amy\'s diagnosis?')">Diagnosis</button>
+                            <button class="question-btn" onclick="askQuestion('Tell me about Amy\'s recent sessions')">Recent sessions</button>
+                            <button class="question-btn" onclick="askQuestion('Have I introduced CBT to Amy?')">CBT status</button>
+                            <button class="question-btn" onclick="askQuestion('Which PHQ9 questions are improving for Amy?')">PHQ9 progress</button>
+                            <button class="question-btn" onclick="askQuestion('Is Amy getting better with sleep quality?')">Sleep quality</button>
+                        </div>
                     </div>
-                    
-                    <div class="task-item">
-                        <i class="task-icon">🔔</i>
-                        <div class="task-content">Review referrals for newly launched payor(s)</div>
-                        <i class="task-arrow">→</i>
-                    </div>
-                    
-                    <div class="task-item">
-                        <i class="task-icon">📄</i>
-                        <div class="task-content">Review your active payor referrals</div>
-                        <i class="task-arrow">→</i>
+
+                    <div class="chat-input-container">
+                        <input 
+                            type="text" 
+                            class="chat-input" 
+                            id="messageInput" 
+                            placeholder="Ask about Amy's treatment..."
+                            autocomplete="off"
+                        >
+                        <button class="send-btn" id="sendBtn" onclick="handleSubmit()">
+                            ✈️
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Bottom Cards Grid -->
-            <div class="card-grid">
-                <!-- Monthly Snapshot Card -->
-                <div class="content-card">
-                    <div class="card-header">
-                        <h2 class="card-title">Monthly snapshot</h2>
-                    </div>
-                    
-                    <div class="task-item">
-                        <div class="task-content">
-                            <strong>Paid:</strong> $0.00
-                        </div>
-                        <i class="task-arrow">→</i>
-                    </div>
-                    
-                    <div class="task-item">
-                        <div class="task-content">
-                            <strong>Client return rate:</strong> No data available yet
-                        </div>
-                        <i class="task-arrow">→</i>
-                    </div>
+            <!-- Treatment Progress Card - Second Section -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Treatment Progress</h2>
                 </div>
-
-                <!-- Your Practice Card -->
-                <div class="content-card">
-                    <div class="card-header">
-                        <h2 class="card-title">Your practice</h2>
+                
+                <div class="treatment-progress">
+                    <div class="progress-item">
+                        <div class="progress-label">Depression (PHQ9)</div>
+                        <div class="progress-value">Moderate → Mild</div>
                     </div>
-                    
-                    <div class="task-item">
-                        <div class="task-content">View my profile</div>
-                        <i class="task-arrow">→</i>
+                    <div class="progress-item">
+                        <div class="progress-label">Anxiety (GAD7)</div>
+                        <div class="progress-value">Moderate → Mild</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">Sleep Quality</div>
+                        <div class="progress-value">Improving</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">CBT Implementation</div>
+                        <div class="progress-value">Active</div>
                     </div>
                 </div>
             </div>
@@ -1046,11 +864,6 @@
             
             // Wrap consecutive <li> elements in <ul>
             formatted = formatted.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
-            
-            // Add special styling for session highlights
-            formatted = formatted.replace(/\*\*Session #(\d+) \((.*?)\):\*\*/g, '<div class="session-highlight"><h4>Session #$1 ($2)</h4></div>');
-            formatted = formatted.replace(/\*\*Session Summary:\*\*/g, '<div class="session-summary"><strong>Session Summary:</strong></div>');
-            formatted = formatted.replace(/\*\*Progress Indicators:\*\*/g, '<div class="progress-indicators"><strong>Progress Indicators:</strong></div>');
             
             return formatted;
         }

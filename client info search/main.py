@@ -4,6 +4,7 @@ FastAPI application with SQLite, Chroma RAG, and OpenAI function-calling tools.
 
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 import uvicorn
 import os
@@ -62,6 +63,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="."), name="static")
 
 # Dependency to get RAG service
 def get_rag_service() -> RAGService:
