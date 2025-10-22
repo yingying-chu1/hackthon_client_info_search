@@ -1,0 +1,2 @@
+client_id,patient_id,provider_id,appointments_scheduled,appointments_completed,appointments_canceled,appointments_no_show,first_appointment_date,last_appointment_date,appointment_completed_YTD
+123456,789012,456789,12,4,0,0,2025-09-02,2026-02-03,4

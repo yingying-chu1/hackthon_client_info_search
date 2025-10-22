@@ -21,11 +21,15 @@ class RAGService:
     async def initialize(self):
         """Initialize Chroma client and collection."""
         try:
-            # Initialize Chroma client
-            self.client = chromadb.Client(Settings(
-                persist_directory="./chroma_db",
-                anonymized_telemetry=False
-            ))
+            # Initialize Chroma client with proper persistence
+            import os
+            persist_dir = "./chroma_db"
+            os.makedirs(persist_dir, exist_ok=True)
+            
+            self.client = chromadb.PersistentClient(
+                path=persist_dir,
+                settings=Settings(anonymized_telemetry=False)
+            )
             
             # Get or create collection
             try:

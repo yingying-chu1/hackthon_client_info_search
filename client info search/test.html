@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>API Test</h1>
+    <button onclick="testAPI()">Test P001 Search</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAPI() {
+            try {
+                const response = await fetch('http://localhost:8000/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: 'P001 first appointment',
+                        n_results: 1
+                    })
+                });
+
+                const data = await response.json();
+                console.log('API Response:', data);
+                
+                document.getElementById('result').innerHTML = `
+                    <h3>Result:</h3>
+                    <p><strong>Patient ID:</strong> ${data.results[0].metadata.patient_id}</p>
+                    <p><strong>Content:</strong> ${data.results[0].content}</p>
+                    <p><strong>Provider:</strong> ${data.results[0].metadata.provider_id}</p>
+                `;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
