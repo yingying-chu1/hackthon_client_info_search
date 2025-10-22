@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Client Summary Test</title>
+</head>
+<body>
+    <h1>Client Summary Test</h1>
+    <button onclick="testSummary()">Test Summary</button>
+    <div id="result"></div>
+
+    <script>
+        async function testSummary() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Loading...';
+            
+            try {
+                console.log('Starting request...');
+                const response = await fetch('http://localhost:8000/client-summary/789012');
+                console.log('Response received:', response);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Data received:', data);
+                
+                resultDiv.innerHTML = `
+                    <h3>Success!</h3>
+                    <p>Patient ID: ${data.patient_id}</p>
+                    <p>Summary Length: ${data.summary.length}</p>
+                    <pre>${data.summary}</pre>
+                `;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `<h3>Error: ${error.message}</h3>`;
+            }
+        }
+    </script>
+</body>
+</html>
+

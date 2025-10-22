@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Summary Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+        }
+        pre {
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        .error {
+            background: #ffe6e6;
+            border-left-color: #ff4757;
+            color: #c23616;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔍 Client Summary Test</h1>
+        <p>Testing the client summary functionality directly.</p>
+        
+        <button onclick="testClientSummary()">Test Client Summary</button>
+        <button onclick="testDirectAPI()">Test Direct API Call</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        async function testClientSummary() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="result">Testing client summary...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/client-summary/789012`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Client Summary Response:', data);
+                
+                resultDiv.innerHTML = `
+                    <div class="result">
+                        <h3>✅ Client Summary Success</h3>
+                        <p><strong>Patient ID:</strong> ${data.patient_id}</p>
+                        <p><strong>Summary Length:</strong> ${data.summary.length} characters</p>
+                        <h4>Summary Content:</h4>
+                        <pre>${data.summary}</pre>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Client summary error:', error);
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>❌ Client Summary Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testDirectAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="result">Testing direct API call...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/search`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: "789012 diagnosis",
+                        n_results: 1
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Search Response:', data);
+                
+                resultDiv.innerHTML = `
+                    <div class="result">
+                        <h3>✅ Search API Success</h3>
+                        <p><strong>Query:</strong> 789012 diagnosis</p>
+                        <p><strong>Results:</strong> ${data.results.length}</p>
+                        <h4>Result Content:</h4>
+                        <pre>${data.results[0] ? data.results[0].content : 'No results'}</pre>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Search error:', error);
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>❌ Search API Error</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
+

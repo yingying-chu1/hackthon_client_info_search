@@ -321,7 +321,7 @@
             <div class="quick-searches">
                 <h3>Quick Searches:</h3>
                 <div class="quick-buttons">
-                    <button class="quick-btn" onclick="getClientSummary('789012')">789012 Client Summary</button>
+                    <button class="quick-btn" onclick="getClientSummary('789012')" style="background: #28a745;">📋 789012 Client Summary</button>
                     <button class="quick-btn" onclick="quickSearch('789012 diagnosis')">789012 Diagnosis</button>
                     <button class="quick-btn" onclick="quickSearch('789012 CBT therapy')">789012 CBT Therapy</button>
                     <button class="quick-btn" onclick="quickSearch('789012 session notes')">789012 Session Notes</button>
@@ -410,11 +410,18 @@
         }
 
         async function getClientSummary(patientId) {
-            if (isLoading) return;
+            console.log('getClientSummary called with patientId:', patientId);
+            
+            if (isLoading) {
+                console.log('Already loading, returning');
+                return;
+            }
             
             isLoading = true;
             showLoading();
             clearResults();
+            
+            console.log('Making API request to:', `${API_BASE}/client-summary/${patientId}`);
 
             try {
                 const response = await fetch(`${API_BASE}/client-summary/${patientId}`, {
@@ -424,13 +431,22 @@
                     }
                 });
 
+                console.log('Response received:', response.status, response.statusText);
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
                 const data = await response.json();
                 console.log('Client Summary Response:', data); // Debug logging
-                displayClientSummary(data);
+                
+                if (data && data.summary) {
+                    console.log('Summary found, displaying...');
+                    displayClientSummary(data);
+                } else {
+                    console.error('No summary in response:', data);
+                    showError('No summary data received from server');
+                }
 
             } catch (error) {
                 console.error('Client summary error:', error);
@@ -442,7 +458,14 @@
         }
 
         function displayClientSummary(data) {
+            console.log('displayClientSummary called with data:', data);
             const resultsSection = document.getElementById('resultsSection');
+            console.log('Results section element:', resultsSection);
+            
+            if (!resultsSection) {
+                console.error('Results section not found!');
+                return;
+            }
             
             resultsSection.innerHTML = `
                 <div class="client-summary">
@@ -452,6 +475,8 @@
                     </div>
                 </div>
             `;
+            
+            console.log('Client summary displayed successfully');
         }
 
         function displayResults(data) {

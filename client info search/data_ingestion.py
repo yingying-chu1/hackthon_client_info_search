@@ -580,6 +580,212 @@ class DataIngestionPipeline:
             print(f"❌ Error getting analytics: {e}")
             return {}
     
+    async def ingest_patient_appointments_csv(self, csv_path: str) -> Dict[str, Any]:
+        """Ingest patient appointment data from CSV."""
+        print(f"📥 Ingesting patient appointments from {csv_path}")
+        
+        try:
+            df = pd.read_csv(csv_path)
+            results = {
+                "file_path": csv_path,
+                "total_rows": len(df),
+                "success": True,
+                "errors": [],
+                "documents_created": 0
+            }
+            
+            # Process each appointment record
+            for _, row in df.iterrows():
+                try:
+                    # Create structured data for RAG
+                    appointment_data = {
+                        "patient_id": str(row['patient_id']),
+                        "client_id": str(row['client_id']),
+                        "provider_id": str(row['provider_id']),
+                        "appointment_id": str(row['appointment_id']),
+                        "appointment_number": int(row['appointment_number']),
+                        "appointment_date": row['appointment_date'],
+                        "diagnosis": row['diagnosis'],
+                        "cpt_code": row['cpt_code'],
+                        "session_notes": row['session_notes'],
+                        "is_completed": bool(row['is_completed']),
+                        "is_cancelled": bool(row['is_cancelled']),
+                        "is_no_show": bool(row['is_no_show'])
+                    }
+                    
+                    # Create searchable text content
+                    content = f"""
+Appointment #{appointment_data['appointment_number']} - Patient {appointment_data['patient_id']}
+Date: {appointment_data['appointment_date']}
+Diagnosis: {appointment_data['diagnosis']}
+CPT Code: {appointment_data['cpt_code']}
+Status: {'Completed' if appointment_data['is_completed'] else 'Cancelled' if appointment_data['is_cancelled'] else 'No Show'}
+Session Notes: {appointment_data['session_notes']}
+                    """.strip()
+                    
+                    # Add to RAG service
+                    await self.rag_service.add_document(
+                        document_id=f"appointment_{appointment_data['appointment_id']}",
+                        content=content,
+                        metadata=appointment_data
+                    )
+                    
+                    results["documents_created"] += 1
+                    
+                except Exception as e:
+                    results["errors"].append(f"Row {_}: {str(e)}")
+            
+            print(f"✅ Processed {results['documents_created']} appointment records")
+            return results
+            
+        except Exception as e:
+            return {
+                "file_path": csv_path,
+                "success": False,
+                "error": str(e),
+                "documents_created": 0
+            }
+    
+    async def ingest_patient_aggregate_csv(self, csv_path: str) -> Dict[str, Any]:
+        """Ingest patient aggregate data from CSV."""
+        print(f"📥 Ingesting patient aggregate data from {csv_path}")
+        
+        try:
+            df = pd.read_csv(csv_path)
+            results = {
+                "file_path": csv_path,
+                "total_rows": len(df),
+                "success": True,
+                "errors": [],
+                "documents_created": 0
+            }
+            
+            # Process each patient aggregate record
+            for _, row in df.iterrows():
+                try:
+                    # Create structured data for RAG
+                    aggregate_data = {
+                        "patient_id": str(row['patient_id']),
+                        "client_id": str(row['client_id']),
+                        "provider_id": str(row['provider_id']),
+                        "appointments_scheduled": int(row['appointments_scheduled']),
+                        "appointments_completed": int(row['appointments_completed']),
+                        "appointments_canceled": int(row['appointments_canceled']),
+                        "appointments_no_show": int(row['appointments_no_show']),
+                        "first_appointment_date": row['first_appointment_date'],
+                        "last_appointment_date": row['last_appointment_date'],
+                        "appointment_completed_YTD": int(row['appointment_completed_YTD']),
+                        "measurment_completed": int(row['measurment_completed'])
+                    }
+                    
+                    # Calculate rates
+                    completion_rate = (aggregate_data['appointments_completed'] / aggregate_data['appointments_scheduled'] * 100) if aggregate_data['appointments_scheduled'] > 0 else 0
+                    cancel_rate = (aggregate_data['appointments_canceled'] / aggregate_data['appointments_scheduled'] * 100) if aggregate_data['appointments_scheduled'] > 0 else 0
+                    no_show_rate = (aggregate_data['appointments_no_show'] / aggregate_data['appointments_scheduled'] * 100) if aggregate_data['appointments_scheduled'] > 0 else 0
+                    
+                    # Create searchable text content
+                    content = f"""
+Patient Summary - Patient {aggregate_data['patient_id']}
+Appointments Scheduled: {aggregate_data['appointments_scheduled']}
+Appointments Completed: {aggregate_data['appointments_completed']} ({completion_rate:.1f}%)
+Appointments Canceled: {aggregate_data['appointments_canceled']} ({cancel_rate:.1f}%)
+No Shows: {aggregate_data['appointments_no_show']} ({no_show_rate:.1f}%)
+First Appointment: {aggregate_data['first_appointment_date']}
+Last Appointment: {aggregate_data['last_appointment_date']}
+Completed YTD: {aggregate_data['appointment_completed_YTD']}
+Measurements Completed: {aggregate_data['measurment_completed']}
+                    """.strip()
+                    
+                    # Add to RAG service
+                    await self.rag_service.add_document(
+                        document_id=f"patient_summary_{aggregate_data['patient_id']}",
+                        content=content,
+                        metadata={
+                            **aggregate_data,
+                            "completion_rate": completion_rate,
+                            "cancel_rate": cancel_rate,
+                            "no_show_rate": no_show_rate
+                        }
+                    )
+                    
+                    results["documents_created"] += 1
+                    
+                except Exception as e:
+                    results["errors"].append(f"Row {_}: {str(e)}")
+            
+            print(f"✅ Processed {results['documents_created']} patient aggregate records")
+            return results
+            
+        except Exception as e:
+            return {
+                "file_path": csv_path,
+                "success": False,
+                "error": str(e),
+                "documents_created": 0
+            }
+    
+    async def ingest_client_measures_csv(self, csv_path: str) -> Dict[str, Any]:
+        """Ingest client measure data from CSV."""
+        print(f"📥 Ingesting client measures from {csv_path}")
+        
+        try:
+            df = pd.read_csv(csv_path)
+            results = {
+                "file_path": csv_path,
+                "total_rows": len(df),
+                "success": True,
+                "errors": [],
+                "documents_created": 0
+            }
+            
+            # Group by client_id and measure_date to create complete assessments
+            grouped = df.groupby(['client_id', 'measure_date', 'measure_type'])
+            
+            for (client_id, measure_date, measure_type), group in grouped:
+                try:
+                    # Create structured data for RAG
+                    measure_data = {
+                        "client_id": str(client_id),
+                        "measure_date": measure_date,
+                        "measure_type": measure_type,
+                        "total_score": int(group.iloc[0]['total_score']),
+                        "question_responses": json.dumps(group[['question_number', 'question_score']].to_dict('records'))
+                    }
+                    
+                    # Create searchable text content
+                    question_responses = json.loads(measure_data['question_responses'])
+                    content = f"""
+Assessment Results - Client {measure_data['client_id']}
+Assessment Date: {measure_data['measure_date']}
+Assessment Type: {measure_data['measure_type']}
+Total Score: {measure_data['total_score']}
+Question Responses:
+{chr(10).join([f"Q{q['question_number']}: {q['question_score']}" for q in question_responses])}
+                    """.strip()
+                    
+                    # Add to RAG service
+                    await self.rag_service.add_document(
+                        document_id=f"measure_{measure_data['client_id']}_{measure_data['measure_date']}_{measure_data['measure_type']}",
+                        content=content,
+                        metadata=measure_data
+                    )
+                    
+                    results["documents_created"] += 1
+                    
+                except Exception as e:
+                    results["errors"].append(f"Group {client_id}-{measure_date}-{measure_type}: {str(e)}")
+            
+            print(f"✅ Processed {results['documents_created']} client measure assessments")
+            return results
+            
+        except Exception as e:
+            return {
+                "file_path": csv_path,
+                "success": False,
+                "error": str(e),
+                "documents_created": 0
+            }
+    
     async def cleanup(self):
         """Cleanup resources."""
         if self.db:
@@ -595,19 +801,26 @@ async def main():
     pipeline = DataIngestionPipeline()
     await pipeline.initialize()
     
-    # Ingest the summary appointments data
-    summary_csv_path = "/Users/yingyingchu/Documents/GitHub/hackthon_client_info_search/client info search/new_client_appointments.csv"
-    summary_results = await pipeline.ingest_appointments_csv(summary_csv_path)
+    # Ingest the new CSV files from data directory
+    data_dir = "/Users/yingyingchu/Documents/GitHub/hackthon_client_info_search/client info search/data"
     
-    print(f"\n📊 Summary Ingestion Results:")
-    print(json.dumps(summary_results, indent=2))
+    # Ingest patient appointment data
+    appointment_csv_path = f"{data_dir}/patient_appointment.csv"
+    appointment_results = await pipeline.ingest_patient_appointments_csv(appointment_csv_path)
+    print(f"\n📊 Patient Appointments Ingestion Results:")
+    print(json.dumps(appointment_results, indent=2))
     
-    # Ingest the detailed appointments data
-    detailed_csv_path = "/Users/yingyingchu/Documents/GitHub/hackthon_client_info_search/client info search/detailed_appointments.csv"
-    detailed_results = await pipeline.ingest_detailed_appointments_csv(detailed_csv_path)
+    # Ingest patient aggregate data
+    aggregate_csv_path = f"{data_dir}/patient_aggregate.csv"
+    aggregate_results = await pipeline.ingest_patient_aggregate_csv(aggregate_csv_path)
+    print(f"\n📊 Patient Aggregate Ingestion Results:")
+    print(json.dumps(aggregate_results, indent=2))
     
-    print(f"\n📊 Detailed Ingestion Results:")
-    print(json.dumps(detailed_results, indent=2))
+    # Ingest client measure data
+    measure_csv_path = f"{data_dir}/client_measure.csv"
+    measure_results = await pipeline.ingest_client_measures_csv(measure_csv_path)
+    print(f"\n📊 Client Measures Ingestion Results:")
+    print(json.dumps(measure_results, indent=2))
     
     # Test search functionality
     print(f"\n🔍 Testing search functionality...")
