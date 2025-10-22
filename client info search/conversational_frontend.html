@@ -116,6 +116,31 @@
             margin-bottom: 5px;
         }
 
+        .session-highlight {
+            background: #f8f9fa;
+            border-left: 4px solid #4facfe;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .progress-indicators {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .session-summary {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+
         .typing-indicator {
             display: none;
             padding: 15px 20px;
@@ -243,6 +268,46 @@
             border-color: #4facfe;
         }
 
+        .visualization-section {
+            margin: 15px 0 0 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+        }
+
+        .visualization-section h4 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .viz-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .viz-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.2);
+        }
+
+        .viz-btn:hover {
+            background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
         .welcome-message {
             text-align: center;
             padding: 40px 20px;
@@ -311,6 +376,15 @@
         <div class="header">
             <h1>🤖 Patient Care Assistant</h1>
             <p>Ask me anything about your patients - I'll provide intelligent insights and analysis</p>
+            
+            <div class="visualization-section">
+                <h4>📊 Assessment Visualizations:</h4>
+                <div class="viz-buttons">
+                    <button class="viz-btn" onclick="openVisualizations()">📈 Open Visualizations</button>
+                    <button class="viz-btn" onclick="openPHQ9Viz()">📊 PHQ9 Analysis</button>
+                    <button class="viz-btn" onclick="openGAD7Viz()">📊 GAD7 Analysis</button>
+                </div>
+            </div>
         </div>
 
         <div class="chat-container">
@@ -346,6 +420,7 @@
                     <button class="quick-btn" onclick="askQuestion('Is the client doing better?')">Is client doing better?</button>
                     <button class="quick-btn" onclick="askQuestion('What is the diagnosis?')">Diagnosis</button>
                     <button class="quick-btn" onclick="askQuestion('Tell me about recent sessions')">Recent sessions</button>
+                    <button class="quick-btn" onclick="askQuestion('Is the client getting better with sleep quality?')">Sleep quality?</button>
                     <button class="quick-btn" onclick="askQuestion('Have I introduced CBT to this client?')">CBT introduced?</button>
                     <button class="quick-btn" onclick="askQuestion('Which PHQ9 questions are improving?')">Which questions improving?</button>
                 </div>
@@ -488,6 +563,11 @@
             // Wrap consecutive <li> elements in <ul>
             formatted = formatted.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
             
+            // Add special styling for session highlights
+            formatted = formatted.replace(/\*\*Session #(\d+) \((.*?)\):\*\*/g, '<div class="session-highlight"><h4>Session #$1 ($2)</h4></div>');
+            formatted = formatted.replace(/\*\*Session Summary:\*\*/g, '<div class="session-summary"><strong>Session Summary:</strong></div>');
+            formatted = formatted.replace(/\*\*Progress Indicators:\*\*/g, '<div class="progress-indicators"><strong>Progress Indicators:</strong></div>');
+            
             return formatted;
         }
 
@@ -513,6 +593,18 @@
         function scrollToBottom() {
             const chatMessages = document.getElementById('chatMessages');
             chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function openVisualizations() {
+            window.open('visualization_frontend.html', '_blank', 'width=1400,height=900,scrollbars=yes,resizable=yes');
+        }
+
+        function openPHQ9Viz() {
+            window.open('visualization_frontend.html?assessment=phq9', '_blank', 'width=1400,height=900,scrollbars=yes,resizable=yes');
+        }
+
+        function openGAD7Viz() {
+            window.open('visualization_frontend.html?assessment=gad7', '_blank', 'width=1400,height=900,scrollbars=yes,resizable=yes');
         }
     </script>
 </body>

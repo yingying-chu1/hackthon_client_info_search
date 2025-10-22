@@ -509,19 +509,28 @@ def generate_phq9_question_analysis(question_changes, phq9_questions, baseline, 
     analysis = f"## PHQ9 Question-Level Analysis for Patient {baseline.get('patient_id', 'Unknown')}\n\n"
     
     total_change = latest['total_score'] - baseline['total_score']
+    baseline_date = baseline.get('date', 'Unknown date')
+    latest_date = latest.get('date', 'Unknown date')
+    
     if total_change < 0:
-        analysis += f"**Overall Progress:** Total score decreased from {baseline['total_score']} to {latest['total_score']} ({abs(total_change)} point improvement)\n\n"
+        analysis += f"**Overall Progress:** Total score decreased from {baseline['total_score']} to {latest['total_score']} ({abs(total_change)} point improvement)\n"
+        analysis += f"- **Baseline assessment:** {baseline_date}\n"
+        analysis += f"- **Latest assessment:** {latest_date}\n\n"
     elif total_change > 0:
-        analysis += f"**Overall Progress:** Total score increased from {baseline['total_score']} to {latest['total_score']} (+{total_change} point increase)\n\n"
+        analysis += f"**Overall Progress:** Total score increased from {baseline['total_score']} to {latest['total_score']} (+{total_change} point increase)\n"
+        analysis += f"- **Baseline assessment:** {baseline_date}\n"
+        analysis += f"- **Latest assessment:** {latest_date}\n\n"
     else:
-        analysis += f"**Overall Progress:** Total score remained stable at {baseline['total_score']} points\n\n"
+        analysis += f"**Overall Progress:** Total score remained stable at {baseline['total_score']} points\n"
+        analysis += f"- **Baseline assessment:** {baseline_date}\n"
+        analysis += f"- **Latest assessment:** {latest_date}\n\n"
     
     if improvements:
         analysis += "### 🎉 Questions Showing Improvement:\n\n"
         for q_num, data in improvements[:3]:  # Top 3 improvements
             question_desc = phq9_questions.get(q_num, f"Question {q_num}")
             analysis += f"**Question {q_num}** ({question_desc}):\n"
-            analysis += f"- Baseline: {data['baseline']} → Latest: {data['latest']} ({data['change']} point improvement)\n"
+            analysis += f"- Baseline: {data['baseline']} ({baseline_date}) → Latest: {data['latest']} ({latest_date}) ({data['change']} point improvement)\n"
             analysis += f"- This suggests the client is experiencing less {question_desc.lower()}\n\n"
     
     if worsening:
@@ -529,7 +538,7 @@ def generate_phq9_question_analysis(question_changes, phq9_questions, baseline, 
         for q_num, data in worsening[:2]:  # Top 2 concerns
             question_desc = phq9_questions.get(q_num, f"Question {q_num}")
             analysis += f"**Question {q_num}** ({question_desc}):\n"
-            analysis += f"- Baseline: {data['baseline']} → Latest: {data['latest']} (+{data['change']} point increase)\n"
+            analysis += f"- Baseline: {data['baseline']} ({baseline_date}) → Latest: {data['latest']} ({latest_date}) (+{data['change']} point increase)\n"
             analysis += f"- This area may need additional focus in therapy\n\n"
     
     # Find stable questions
@@ -545,7 +554,7 @@ def generate_phq9_question_analysis(question_changes, phq9_questions, baseline, 
         best_improvement = improvements[0]
         q_num = best_improvement[0]
         question_desc = phq9_questions.get(q_num, f"Question {q_num}")
-        analysis += f"- **Biggest improvement** in {question_desc.lower()} suggests this intervention area is most effective\n"
+        analysis += f"- **Biggest improvement** in {question_desc.lower()} (based on measure taken on {latest_date} compared to {baseline_date}) suggests this intervention area is most effective\n"
     
     if latest['total_score'] <= 4:
         analysis += "- **Current score ≤ 4**: Minimal depression symptoms\n"
@@ -574,19 +583,28 @@ def generate_gad7_question_analysis(question_changes, gad7_questions, baseline, 
     analysis = f"## GAD7 Question-Level Analysis for Patient {baseline.get('patient_id', 'Unknown')}\n\n"
     
     total_change = latest['total_score'] - baseline['total_score']
+    baseline_date = baseline.get('date', 'Unknown date')
+    latest_date = latest.get('date', 'Unknown date')
+    
     if total_change < 0:
-        analysis += f"**Overall Progress:** Total score decreased from {baseline['total_score']} to {latest['total_score']} ({abs(total_change)} point improvement)\n\n"
+        analysis += f"**Overall Progress:** Total score decreased from {baseline['total_score']} to {latest['total_score']} ({abs(total_change)} point improvement)\n"
+        analysis += f"- **Baseline assessment:** {baseline_date}\n"
+        analysis += f"- **Latest assessment:** {latest_date}\n\n"
     elif total_change > 0:
-        analysis += f"**Overall Progress:** Total score increased from {baseline['total_score']} to {latest['total_score']} (+{total_change} point increase)\n\n"
+        analysis += f"**Overall Progress:** Total score increased from {baseline['total_score']} to {latest['total_score']} (+{total_change} point increase)\n"
+        analysis += f"- **Baseline assessment:** {baseline_date}\n"
+        analysis += f"- **Latest assessment:** {latest_date}\n\n"
     else:
-        analysis += f"**Overall Progress:** Total score remained stable at {baseline['total_score']} points\n\n"
+        analysis += f"**Overall Progress:** Total score remained stable at {baseline['total_score']} points\n"
+        analysis += f"- **Baseline assessment:** {baseline_date}\n"
+        analysis += f"- **Latest assessment:** {latest_date}\n\n"
     
     if improvements:
         analysis += "### 🎉 Questions Showing Improvement:\n\n"
         for q_num, data in improvements[:3]:  # Top 3 improvements
             question_desc = gad7_questions.get(q_num, f"Question {q_num}")
             analysis += f"**Question {q_num}** ({question_desc}):\n"
-            analysis += f"- Baseline: {data['baseline']} → Latest: {data['latest']} ({data['change']} point improvement)\n"
+            analysis += f"- Baseline: {data['baseline']} ({baseline_date}) → Latest: {data['latest']} ({latest_date}) ({data['change']} point improvement)\n"
             analysis += f"- This suggests the client is experiencing less {question_desc.lower()}\n\n"
     
     if worsening:
@@ -594,7 +612,7 @@ def generate_gad7_question_analysis(question_changes, gad7_questions, baseline, 
         for q_num, data in worsening[:2]:  # Top 2 concerns
             question_desc = gad7_questions.get(q_num, f"Question {q_num}")
             analysis += f"**Question {q_num}** ({question_desc}):\n"
-            analysis += f"- Baseline: {data['baseline']} → Latest: {data['latest']} (+{data['change']} point increase)\n"
+            analysis += f"- Baseline: {data['baseline']} ({baseline_date}) → Latest: {data['latest']} ({latest_date}) (+{data['change']} point increase)\n"
             analysis += f"- This area may need additional focus in therapy\n\n"
     
     # Find stable questions
@@ -610,7 +628,7 @@ def generate_gad7_question_analysis(question_changes, gad7_questions, baseline, 
         best_improvement = improvements[0]
         q_num = best_improvement[0]
         question_desc = gad7_questions.get(q_num, f"Question {q_num}")
-        analysis += f"- **Biggest improvement** in {question_desc.lower()} suggests this intervention area is most effective\n"
+        analysis += f"- **Biggest improvement** in {question_desc.lower()} (based on measure taken on {latest_date} compared to {baseline_date}) suggests this intervention area is most effective\n"
     
     if latest['total_score'] <= 4:
         analysis += "- **Current score ≤ 4**: Minimal anxiety symptoms\n"
@@ -813,8 +831,78 @@ async def handle_conversational_query(query: str, patient_id: str, rag):
     
     query_lower = query.lower()
     
+    # Sleep-specific queries
+    if any(word in query_lower for word in ['sleep', 'sleeping', 'insomnia', 'sleep quality', 'trouble sleeping', 'sleep disturbance']):
+        # Get PHQ9 Question 3 analysis (sleep-related)
+        try:
+            phq9_response = await get_phq9_analysis(patient_id, rag)
+            if 'error' not in phq9_response:
+                question_changes = phq9_response.get('question_changes', {})
+                sleep_data = question_changes.get('3', None)  # Question 3 is about sleep
+                
+                if sleep_data:
+                    baseline_score = sleep_data['baseline']
+                    latest_score = sleep_data['latest']
+                    change = sleep_data['change']
+                    
+                    response = f"**Sleep Quality Analysis for this client:**\n\n"
+                    
+                    if change < 0:
+                        response += f"🎉 **Yes, sleep quality is improving!**\n"
+                        response += f"- **Baseline (1/2/25)**: {baseline_score}/3 (Trouble falling or staying asleep, or sleeping too much)\n"
+                        response += f"- **Latest (10/21/25)**: {latest_score}/3\n"
+                        response += f"- **Improvement**: {abs(change)} point decrease\n\n"
+                        
+                        if latest_score == 0:
+                            response += "✅ **Excellent**: No sleep problems reported\n"
+                        elif latest_score == 1:
+                            response += "✅ **Good**: Minimal sleep difficulties\n"
+                        elif latest_score == 2:
+                            response += "📈 **Improving**: Moderate sleep issues, but getting better\n"
+                    elif change > 0:
+                        response += f"⚠️ **Sleep quality may be worsening**\n"
+                        response += f"- **Baseline (1/2/25)**: {baseline_score}/3\n"
+                        response += f"- **Latest (10/21/25)**: {latest_score}/3\n"
+                        response += f"- **Change**: +{change} point increase\n\n"
+                        response += "💡 **Consider**: Sleep hygiene techniques or sleep-focused interventions\n"
+                    else:
+                        response += f"📊 **Sleep quality is stable**\n"
+                        response += f"- **Consistent score**: {baseline_score}/3 across assessments\n\n"
+                    
+                    # Add sleep-specific session insights
+                    results = await rag.search(f"patient {patient_id} sleep", n_results=10)
+                    sleep_mentions = [r for r in results if 'sleep' in r.content.lower()]
+                    
+                    if sleep_mentions:
+                        response += "**Sleep-related session notes:**\n\n"
+                        for mention in sleep_mentions[:2]:
+                            session_num = mention.metadata.get('appointment_number', 'N/A')
+                            date = mention.metadata.get('appointment_date', 'Unknown')
+                            content = mention.content
+                            
+                            if 'Session Notes:' in content:
+                                notes = content.split('Session Notes:')[1].strip()
+                            else:
+                                notes = content
+                            
+                            if 'sleep' in notes.lower():
+                                response += f"**Session #{session_num} ({date}):**\n"
+                                # Extract sleep-related sentences
+                                sentences = notes.split('.')
+                                sleep_sentences = [s.strip() for s in sentences if 'sleep' in s.lower()]
+                                if sleep_sentences:
+                                    response += f"- {sleep_sentences[0]}.\n\n"
+                    
+                    return response
+                else:
+                    return "I don't have specific sleep quality data for this client. The PHQ9 Question 3 (sleep-related) data may not be available."
+            else:
+                return "I need PHQ9 assessment data to analyze sleep quality. Please ensure the client has completed PHQ9 assessments."
+        except:
+            return "I can analyze sleep quality using PHQ9 Question 3 data, but I need more assessment information for this client."
+    
     # CBT and therapy intervention queries
-    if any(word in query_lower for word in ['cbt', 'cognitive behavioral', 'therapy', 'intervention', 'introduced', 'using', 'technique', 'approach']):
+    elif any(word in query_lower for word in ['cbt', 'cognitive behavioral', 'therapy', 'intervention', 'introduced', 'using', 'technique', 'approach']):
         # Check for timing-specific questions
         if any(word in query_lower for word in ['when', 'first', 'introduced', 'started', 'began']):
             # Search for CBT mentions chronologically
@@ -1002,6 +1090,20 @@ async def handle_conversational_query(query: str, patient_id: str, rag):
             phq9_scores = []
             gad7_scores = []
             
+            # Sort assessments by date to ensure correct order
+            def parse_date_for_sorting(date_str):
+                try:
+                    if '/' in date_str:
+                        parts = date_str.split('/')
+                        if len(parts) == 3:
+                            month, day, year = parts
+                            return f"20{year}-{month.zfill(2)}-{day.zfill(2)}"
+                    return "1900-01-01"
+                except:
+                    return "1900-01-01"
+            
+            assessments.sort(key=lambda x: parse_date_for_sorting(x.metadata.get('measure_date', '1900-01-01')))
+            
             for assessment in assessments:
                 if assessment.metadata.get('measure_type') == 'PHQ9':
                     phq9_scores.append(assessment.metadata.get('total_score', 0))
@@ -1030,13 +1132,58 @@ async def handle_conversational_query(query: str, patient_id: str, rag):
                 elif trend > 2:
                     response += "⚠️ **Anxiety levels have increased** by {} points - monitor this closely.\n\n".format(trend)
             
-            # Add session insights
+            # Add detailed session insights
             if appointments:
-                recent_appointments = sorted(appointments, key=lambda x: x.metadata.get('appointment_date', ''), reverse=True)[:2]
-                response += "**Recent session highlights:**\n"
+                # Sort appointments by date (most recent first)
+                def parse_appointment_date(date_str):
+                    try:
+                        if '/' in date_str:
+                            parts = date_str.split('/')
+                            if len(parts) == 3:
+                                month, day, year = parts
+                                return f"20{year}-{month.zfill(2)}-{day.zfill(2)}"
+                        return "1900-01-01"
+                    except:
+                        return "1900-01-01"
+                
+                recent_appointments = sorted(appointments, key=lambda x: parse_appointment_date(x.metadata.get('appointment_date', '1900-01-01')), reverse=True)[:3]
+                response += "**Recent session highlights:**\n\n"
+                
                 for appt in recent_appointments:
-                    if 'progress' in appt.content.lower() or 'improvement' in appt.content.lower():
-                        response += f"- Session {appt.metadata.get('appointment_number', 'N/A')}: Shows positive progress\n"
+                    session_num = appt.metadata.get('appointment_number', 'N/A')
+                    appointment_date = appt.metadata.get('appointment_date', 'Unknown')
+                    content = appt.content
+                    
+                    # Extract session notes
+                    if 'Session Notes:' in content:
+                        notes = content.split('Session Notes:')[1].strip()
+                    else:
+                        notes = content
+                    
+                    # Remove "nan" if present
+                    if notes.lower() == 'nan':
+                        notes = "No detailed session notes available."
+                    
+                    response += f"**Session #{session_num} ({appointment_date}):**\n"
+                    
+                    # Extract key progress indicators
+                    if 'progress' in notes.lower() or 'improvement' in notes.lower():
+                        response += "✅ **Progress Indicators:**\n"
+                        
+                        # Extract specific progress mentions
+                        if 'anxiety' in notes.lower() and ('decreased' in notes.lower() or 'reduced' in notes.lower()):
+                            response += "- Anxiety levels showing improvement\n"
+                        if 'depression' in notes.lower() and ('decreased' in notes.lower() or 'reduced' in notes.lower()):
+                            response += "- Depression symptoms improving\n"
+                        if 'cbt' in notes.lower():
+                            response += "- CBT techniques being applied effectively\n"
+                        if 'homework' in notes.lower():
+                            response += "- Client engaging with therapeutic homework\n"
+                        if 'insight' in notes.lower():
+                            response += "- Client demonstrating increased insight\n"
+                    
+                    # Show complete session summary (no truncation)
+                    response += f"**Session Summary:**\n{notes}\n\n"
             
             return response
         else:
