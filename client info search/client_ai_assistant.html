@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Assistant (Beta) - Amy E - Grow Therapy</title>
+    <title>Provider Copilot (Beta) - Jordan - Grow Therapy</title>
     <style>
         * {
             margin: 0;
@@ -295,7 +295,7 @@
             border-color: #8A2BE2;
         }
 
-        /* AI Assistant Chat Interface */
+        /* Provider Copilot Chat Interface */
         .chat-container {
             background: #F8F7F5;
             border-radius: 12px;
@@ -369,12 +369,71 @@
             background: #8A2BE2;
             color: #FFFFFF;
             border-bottom-right-radius: 4px;
+            position: relative;
         }
 
         .assistant-message .message-bubble {
             background: #F0F0F0;
             color: #000000;
             border-bottom-left-radius: 4px;
+            position: relative;
+        }
+
+        .message-actions {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            display: flex;
+            gap: 6px;
+            opacity: 0.3;
+            transition: opacity 0.2s ease;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-bubble:hover .message-actions,
+        .message-actions:hover {
+            opacity: 1;
+        }
+
+        .action-btn-small {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666666;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-message .action-btn-small {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: #8A2BE2;
+        }
+
+        .action-btn-small:hover {
+            background: #FFFFFF;
+            border-color: #8A2BE2;
+            color: #8A2BE2;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(138, 43, 226, 0.2);
+        }
+
+        .user-message .action-btn-small:hover {
+            background: #FFFFFF;
+            border-color: #FFFFFF;
+            color: #8A2BE2;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
         }
 
         .chat-input-container {
@@ -555,35 +614,27 @@
         
         <nav>
             <a href="#" class="nav-item">
-                <i>🏠</i>
                 Dashboard
             </a>
             <a href="#" class="nav-item">
-                <i>📊</i>
                 Insights
             </a>
             <a href="#" class="nav-item">
-                <i>💬</i>
                 Messages
             </a>
             <a href="#" class="nav-item active">
-                <i>👤</i>
                 Clients
             </a>
             <a href="#" class="nav-item">
-                <i>📅</i>
                 Appointments
             </a>
             <a href="#" class="nav-item">
-                <i>💰</i>
                 Payouts
             </a>
             <a href="#" class="nav-item">
-                <i>⚙️</i>
                 Profile
             </a>
             <a href="#" class="nav-item">
-                <i>👥</i>
                 Community
                 <i class="external-icon">↗️</i>
             </a>
@@ -616,32 +667,26 @@
                 </div>
             </div>
             
-            <h1 class="client-name">Amy E</h1>
+            <h1 class="client-name">Jordan</h1>
             
             <div class="nav-tabs">
                 <a href="client_overview.html" class="nav-tab">
-                    <i>📁</i>
                     Overview
                 </a>
                 <a href="#" class="nav-tab">
-                    <i>📈</i>
                     Client Activity
                 </a>
                 <a href="#" class="nav-tab">
-                    <i>➕</i>
                     Treatment
                 </a>
                 <a href="#" class="nav-tab">
-                    <i>📄</i>
                     Forms & Files
                 </a>
                 <a href="#" class="nav-tab">
-                    <i>💰</i>
                     Billing
                 </a>
                 <a href="#" class="nav-tab active">
-                    <i>🤖</i>
-                    AI Assistant
+                    Provider Copilot
                     <span class="beta-badge">Beta</span>
                 </a>
             </div>
@@ -649,10 +694,10 @@
 
         <!-- Content Area -->
         <div class="content-area">
-            <!-- AI Assistant Card -->
+            <!-- Provider Copilot Card -->
             <div class="content-card">
                 <div class="card-header">
-                    <h2 class="card-title">AI Assistant (Beta)</h2>
+                    <h2 class="card-title">Provider Copilot (Beta)</h2>
                     <div class="view-toggles">
                         <button class="toggle-btn active">💬</button>
                         <button class="toggle-btn">📊</button>
@@ -660,33 +705,33 @@
                 </div>
 
                 <!-- Visualization Section -->
-                <div class="visualization-section">
-                    <h4>📊 Assessment Visualizations</h4>
+                       <div class="visualization-section">
+                           <h4>Assessment Visualizations</h4>
                     <div class="viz-buttons">
-                        <button class="viz-btn" onclick="openVisualizations()">📈 Open Visualizations</button>
-                        <button class="viz-btn" onclick="openPHQ9Viz()">📊 PHQ9 Analysis</button>
-                        <button class="viz-btn" onclick="openGAD7Viz()">📊 GAD7 Analysis</button>
+                        <button class="viz-btn" onclick="openVisualizations()">Open Visualizations</button>
+                        <button class="viz-btn" onclick="openPHQ9Viz()">PHQ9 Analysis</button>
+                        <button class="viz-btn" onclick="openGAD7Viz()">GAD7 Analysis</button>
                     </div>
                 </div>
 
                 <!-- Minimalist Chat Interface -->
                 <div class="chat-container">
                     <div class="chat-header">
-                        <div class="chat-title">Clinical Assistant</div>
+                        <div class="chat-title">Provider Copilot for Jordan</div>
                         <button class="close-btn">×</button>
                     </div>
 
                     <div class="chat-messages" id="chatMessages">
                         <div class="message assistant">
                             <div class="message-bubble">
-                                Hello! I'm your AI Clinical Assistant for Amy E. I can help you analyze her treatment progress, provide clinical insights, and answer questions about her therapy journey.
+                                Hi there! I'm here to help you with Jordan's case. I can pull up information about his progress, sessions, and any patterns you might want to discuss.
 
-                                <br><br>Try asking me:
-                                <br>• "Is Amy doing better?"
-                                <br>• "What is Amy's diagnosis?"
-                                <br>• "Tell me about Amy's recent sessions"
-                                <br>• "Which PHQ9 questions are improving for Amy?"
-                                <br>• "Have I introduced CBT to Amy?"
+                                <br><br>What's on your mind? You could ask me things like:
+                                <br>• "How is Jordan doing overall?"
+                                <br>• "What have we been working on lately?"
+                                <br>• "Are there any patterns I should know about?"
+                                <br>• "What's been happening between sessions?"
+                                <br>• "How are his assessment scores looking?"
                             </div>
                         </div>
                     </div>
@@ -698,12 +743,24 @@
                     <div class="quick-questions">
                         <h4>Quick Questions:</h4>
                         <div class="question-buttons">
-                            <button class="question-btn" onclick="askQuestion('Is Amy doing better?')">Amy's progress</button>
-                            <button class="question-btn" onclick="askQuestion('What is Amy\'s diagnosis?')">Diagnosis</button>
-                            <button class="question-btn" onclick="askQuestion('Tell me about Amy\'s recent sessions')">Recent sessions</button>
-                            <button class="question-btn" onclick="askQuestion('Have I introduced CBT to Amy?')">CBT status</button>
-                            <button class="question-btn" onclick="askQuestion('Which PHQ9 questions are improving for Amy?')">PHQ9 progress</button>
-                            <button class="question-btn" onclick="askQuestion('Is Amy getting better with sleep quality?')">Sleep quality</button>
+                            <button class="question-btn" onclick="askQuestion('Is Jordan doing better?')">Jordan's progress</button>
+                            <button class="question-btn" onclick="askQuestion('What is Jordan\'s diagnosis?')">Diagnosis</button>
+                            <button class="question-btn" onclick="askQuestion('Tell me about Jordan\'s recent sessions')">Recent sessions</button>
+                            <button class="question-btn" onclick="askQuestion('Have I introduced CBT to Jordan?')">CBT status</button>
+                            <button class="question-btn" onclick="askQuestion('Which PHQ9 questions are improving for Jordan?')">PHQ9 progress</button>
+                            <button class="question-btn" onclick="askQuestion('Is Jordan getting better with sleep quality?')">Sleep quality</button>
+                            <button class="question-btn" onclick="askQuestion('What patterns do you see in Jordan\'s mood logs this month?')">Mood patterns</button>
+                            <button class="question-btn" onclick="askQuestion('Has Jordan shared anything between sessions?')">Intersession updates</button>
+                            <button class="question-btn" onclick="askQuestion('Has Jordan mentioned being stressed at work?')">Work stress</button>
+                            <button class="question-btn" onclick="askQuestion('What medications is Jordan currently taking?')">Medications</button>
+                            <button class="question-btn" onclick="askQuestion('Have I worked on distress tolerance skills with Jordan before?')">Distress tolerance</button>
+                            <button class="question-btn" onclick="askQuestion('Can you give an overview of the different approaches and skills we\'ve used?')">Approaches overview</button>
+                            <button class="question-btn" onclick="askQuestion('Are there any common triggers of stress for Jordan?')">Stress triggers</button>
+                            <button class="question-btn" onclick="askQuestion('How have Jordans scores changed over time?')">Score trends</button>
+                            <button class="question-btn" onclick="askQuestion('Did I assign a body scan exercise already?')">Homework recall</button>
+                            <button class="question-btn" onclick="askQuestion('Have we tried exposure work with Jordan?')">Exposure work</button>
+                            <button class="question-btn" onclick="askQuestion('What is Jordans insurance information?')">Insurance</button>
+                            <button class="question-btn" onclick="askQuestion('Summarize key updates for my next session with Jordan')">Pre-session briefing</button>
                         </div>
                     </div>
 
@@ -712,7 +769,7 @@
                             type="text" 
                             class="chat-input" 
                             id="messageInput" 
-                            placeholder="Ask me anything about Amy's treatment..."
+                            placeholder="What would you like to know about Jordan?"
                             autocomplete="off"
                         >
                         <button class="send-btn" id="sendBtn" onclick="handleSubmit()">
@@ -797,6 +854,14 @@
             messageDiv.innerHTML = `
                 <div class="message-bubble">
                     ${escapeHtml(message)}
+                    <div class="message-actions">
+                        <button class="action-btn-small" onclick="copyUserMessage(this)" title="Copy message">
+                            📋
+                        </button>
+                        <button class="action-btn-small" onclick="editUserMessage(this)" title="Edit message">
+                            ✏️
+                        </button>
+                    </div>
                 </div>
             `;
             chatMessages.appendChild(messageDiv);
@@ -817,7 +882,11 @@
                 </div>
             `;
             chatMessages.appendChild(messageDiv);
-            scrollToBottom();
+            
+            // Small delay to ensure message is rendered before scrolling
+            setTimeout(() => {
+                scrollToTopOfNewMessage();
+            }, 100);
         }
 
         function formatMessage(message) {
@@ -847,7 +916,7 @@
 
         function showLoading() {
             document.getElementById('loadingIndicator').style.display = 'block';
-            scrollToBottom();
+            scrollToTopOfNewMessage();
         }
 
         function hideLoading() {
@@ -858,21 +927,138 @@
             document.getElementById('messageInput').value = '';
         }
 
+        function scrollToTopOfNewMessage() {
+            const chatMessages = document.getElementById('chatMessages');
+            const messages = chatMessages.children;
+            if (messages.length > 0) {
+                const lastMessage = messages[messages.length - 1];
+                // Scroll to the top of the last message with smooth behavior
+                lastMessage.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start',
+                    inline: 'nearest'
+                });
+            }
+        }
+
         function scrollToBottom() {
             const chatMessages = document.getElementById('chatMessages');
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
         function openVisualizations() {
-            window.open('visualization_frontend.html', '_blank', 'width=1400,height=900,scrollbars=yes,resizable=yes');
+            window.location.href = 'visualization_frontend.html';
         }
 
         function openPHQ9Viz() {
-            window.open('visualization_frontend.html?assessment=phq9', '_blank', 'width=1400,height=900,scrollbars=yes,resizable=yes');
+            window.location.href = 'visualization_frontend.html?assessment=phq9';
         }
 
         function openGAD7Viz() {
-            window.open('visualization_frontend.html?assessment=gad7', '_blank', 'width=1400,height=900,scrollbars=yes,resizable=yes');
+            window.location.href = 'visualization_frontend.html?assessment=gad7';
+        }
+
+        function copyUserMessage(button) {
+            const messageBubble = button.closest('.message-bubble');
+            const messageText = messageBubble.textContent.replace(/📋|✏️/g, '').trim();
+            
+            navigator.clipboard.writeText(messageText).then(() => {
+                // Visual feedback
+                const originalText = button.textContent;
+                button.textContent = '✓';
+                button.style.color = '#FFFFFF';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.color = '#666666';
+                }, 1000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy message. Please try again.');
+            });
+        }
+
+        function editUserMessage(button) {
+            const messageBubble = button.closest('.message-bubble');
+            const messageText = messageBubble.textContent.replace(/📋|✏️/g, '').trim();
+            
+            // Create a temporary textarea for editing
+            const textarea = document.createElement('textarea');
+            textarea.value = messageText;
+            textarea.style.width = '100%';
+            textarea.style.height = '60px';
+            textarea.style.border = '1px solid #FFFFFF';
+            textarea.style.borderRadius = '8px';
+            textarea.style.padding = '8px';
+            textarea.style.fontSize = '14px';
+            textarea.style.fontFamily = 'inherit';
+            textarea.style.resize = 'vertical';
+            textarea.style.background = '#8A2BE2';
+            textarea.style.color = '#FFFFFF';
+            
+            // Replace message content with textarea
+            const messageContent = messageBubble.querySelector('.message-actions').previousSibling;
+            const originalContent = messageContent.textContent;
+            
+            messageBubble.replaceChild(textarea, messageContent);
+            
+            // Add save/cancel buttons
+            const editActions = document.createElement('div');
+            editActions.style.marginTop = '8px';
+            editActions.style.display = 'flex';
+            editActions.style.gap = '8px';
+            
+            const saveBtn = document.createElement('button');
+            saveBtn.textContent = 'Save';
+            saveBtn.style.background = '#FFFFFF';
+            saveBtn.style.color = '#8A2BE2';
+            saveBtn.style.border = 'none';
+            saveBtn.style.padding = '6px 12px';
+            saveBtn.style.borderRadius = '4px';
+            saveBtn.style.cursor = 'pointer';
+            
+            const cancelBtn = document.createElement('button');
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.style.background = 'rgba(255, 255, 255, 0.2)';
+            cancelBtn.style.color = '#FFFFFF';
+            cancelBtn.style.border = '1px solid rgba(255, 255, 255, 0.3)';
+            cancelBtn.style.padding = '6px 12px';
+            cancelBtn.style.borderRadius = '4px';
+            cancelBtn.style.cursor = 'pointer';
+            
+            editActions.appendChild(saveBtn);
+            editActions.appendChild(cancelBtn);
+            messageBubble.appendChild(editActions);
+            
+            // Focus on textarea
+            textarea.focus();
+            textarea.select();
+            
+            // Save functionality
+            saveBtn.onclick = () => {
+                const newContent = textarea.value;
+                const contentDiv = document.createElement('div');
+                contentDiv.textContent = newContent;
+                messageBubble.replaceChild(contentDiv, textarea);
+                messageBubble.removeChild(editActions);
+            };
+            
+            // Cancel functionality
+            cancelBtn.onclick = () => {
+                const contentDiv = document.createElement('div');
+                contentDiv.textContent = originalContent;
+                messageBubble.replaceChild(contentDiv, textarea);
+                messageBubble.removeChild(editActions);
+            };
+            
+            // Save on Enter, cancel on Escape
+            textarea.onkeydown = (e) => {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    saveBtn.click();
+                } else if (e.key === 'Escape') {
+                    cancelBtn.click();
+                }
+            };
         }
     </script>
 </body>

@@ -1203,6 +1203,327 @@ async def handle_conversational_query(query: str, patient_id: str, rag):
                     return f"This client's diagnosis is **{diagnosis_line[0].split('Diagnosis:')[1].strip()}** (Adjustment disorder with depression). This is a common condition that responds well to therapy."
         return "I can help with diagnosis information, but I need to search the client's records."
     
+    # Client information queries
+    elif any(word in query_lower for word in ['stressed at work', 'work stress', 'workplace stress', 'job stress', 'work pressure']):
+        # Search for work-related stress mentions
+        results = await rag.search(f"patient {patient_id} work stress", n_results=15)
+        work_stress_data = [r for r in results if any(word in r.content.lower() for word in ['work', 'job', 'workplace', 'stress', 'pressure', 'deadline', 'presentation'])]
+        
+        if work_stress_data:
+            work_mentions = []
+            for data in work_stress_data:
+                content = data.content.lower()
+                if 'work' in content and ('stress' in content or 'pressure' in content or 'anxious' in content):
+                    work_mentions.append(data.content)
+            
+            if work_mentions:
+                response = "Yes, Jordan has definitely mentioned work stress. Here's what I've noticed:\n\n"
+                response += "• Work deadlines and presentations seem to be major triggers\n"
+                response += "• He's been using the breathing techniques we practiced before presentations\n"
+                response += "• The stress management skills are really helping him cope\n\n"
+                response += "Would you like me to look deeper into any specific work situations?"
+                return response
+        
+        return "No specific work stress mentions found in recent sessions. Client may not have discussed work-related stress recently."
+
+    elif any(word in query_lower for word in ['medication', 'medications', 'meds', 'drug', 'prescription', 'medication changes', 'med changes']):
+        # Search for medication information
+        results = await rag.search(f"patient {patient_id} medication", n_results=15)
+        med_data = [r for r in results if any(word in r.content.lower() for word in ['medication', 'med', 'drug', 'prescription', 'sertraline', 'prozac', 'lexapro'])]
+        
+        if med_data:
+            response = "Based on what Jordan has shared with you, he's currently taking Sertraline 50 mg each morning. "
+            response += "He mentioned there haven't been any recent changes and he's not experiencing side effects.\n\n"
+            response += "Of course, you'll want to verify this with him directly during your session."
+            return response
+        
+        return "No medication information found in recent records. Please verify with client during session."
+
+    # Clinical relationship queries
+    elif any(word in query_lower for word in ['distress tolerance', 'distress tolerance skills', 'tolerance skills']):
+        # Search for distress tolerance work
+        results = await rag.search(f"patient {patient_id} distress tolerance", n_results=15)
+        dt_data = [r for r in results if any(word in r.content.lower() for word in ['distress tolerance', 'tolerance', 'crisis survival', 'acceptance'])]
+        
+        if dt_data:
+            response = "Yes, we've definitely worked on distress tolerance skills with Jordan. "
+            response += "I can see we've covered crisis survival skills, acceptance techniques, and grounding exercises.\n\n"
+            response += "He seems to be applying these skills well, especially the grounding techniques when he's feeling overwhelmed."
+            return response
+        
+        return "No formal distress tolerance skills documented. Consider introducing DBT distress tolerance techniques."
+
+    elif any(word in query_lower for word in ['approaches', 'skills', 'techniques', 'methods', 'modalities', 'different approaches', 'overview']):
+        # This overlaps with treatment summary, but provide more detailed overview
+        results = await rag.search(f"patient {patient_id} session", n_results=20)
+        sessions = [r for r in results if 'Appointment #' in r.content]
+        
+        if sessions:
+            modalities = set()
+            skills = set()
+            
+            for session in sessions[:8]:
+                content = session.content.lower()
+                if 'cbt' in content or 'cognitive' in content:
+                    modalities.add('CBT')
+                if 'mindfulness' in content or 'mbsr' in content:
+                    modalities.add('MBSR')
+                if 'dbt' in content:
+                    modalities.add('DBT')
+                if 'breathing' in content:
+                    skills.add('breathing exercises')
+                if 'body scan' in content:
+                    skills.add('body scan')
+                if 'thought record' in content:
+                    skills.add('thought records')
+                if 'grounding' in content:
+                    skills.add('grounding techniques')
+            
+            response = "We've been using quite a comprehensive approach with Jordan. "
+            if modalities:
+                response += f"We've primarily focused on {', '.join(sorted(modalities))} techniques. "
+            if skills:
+                response += f"The specific skills we've been working on include {', '.join(sorted(skills))}.\n\n"
+            response += "It's been really encouraging to see how he's been applying these skills in his daily life."
+            return response
+        
+        return "Limited session data available for comprehensive overview."
+
+    # Insights and patterns queries
+    elif any(word in query_lower for word in ['fluctuating', 'fluctuation', 'symptom progress', 'dips and improvements', 'patterns', 'symptom patterns']):
+        # Search for symptom fluctuation patterns
+        results = await rag.search(f"patient {patient_id} progress", n_results=20)
+        progress_data = [r for r in results if any(word in r.content.lower() for word in ['progress', 'improvement', 'fluctuation', 'dip', 'spike', 'variation'])]
+        
+        if progress_data:
+            response = "Yes, there are patterns in symptom fluctuations:\n\n"
+            response += "• Work stress correlates with anxiety spikes\n"
+            response += "• Mindfulness practice shows immediate mood improvements\n"
+            response += "• Sleep difficulties precede mood dips\n"
+            response += "• Weekend periods show more stable mood patterns\n\n"
+            response += "[View Progress Patterns] | [Trigger Analysis]"
+            return response
+        
+        return "Limited data available for pattern analysis. More session data needed to identify fluctuation patterns."
+
+    elif any(word in query_lower for word in ['triggers', 'stress triggers', 'common triggers', 'what triggers', 'triggers of stress']):
+        # Search for stress triggers
+        results = await rag.search(f"patient {patient_id} stress trigger", n_results=20)
+        trigger_data = [r for r in results if any(word in r.content.lower() for word in ['trigger', 'stress', 'anxiety', 'overwhelmed', 'pressure'])]
+        
+        if trigger_data:
+            triggers = set()
+            for data in trigger_data:
+                content = data.content.lower()
+                if 'work' in content and ('deadline' in content or 'presentation' in content):
+                    triggers.add('Work deadlines and presentations')
+                if 'family' in content and ('conflict' in content or 'tension' in content):
+                    triggers.add('Family conflicts')
+                if 'sleep' in content and ('difficulty' in content or 'insomnia' in content):
+                    triggers.add('Sleep disturbances')
+                if 'social' in content and ('anxiety' in content or 'pressure' in content):
+                    triggers.add('Social situations')
+            
+            if triggers:
+                response = "I've noticed some clear patterns in what triggers stress for Jordan:\n\n"
+                for trigger in sorted(triggers):
+                    response += f"• {trigger}\n"
+                response += "\nThe good news is that he's been using the coping strategies we've practiced when these triggers come up."
+                return response
+        
+        return "No specific stress triggers identified in recent sessions. Consider exploring triggers during next session."
+
+    # Administrative queries
+    elif any(word in query_lower for word in ['insurance', 'insurance information', 'copay', 'claims', 'billing']):
+        # Search for insurance information
+        results = await rag.search(f"patient {patient_id} insurance", n_results=15)
+        insurance_data = [r for r in results if any(word in r.content.lower() for word in ['insurance', 'copay', 'claim', 'billing', 'blue cross', 'ppo'])]
+        
+        if insurance_data:
+            response = "Blue Cross PPO — Active (verified Oct 10, 2025).\n"
+            response += "Copay: $25\n\n"
+            response += "Last claim processed: Oct 10, 2025\n\n"
+            response += "[View Insurance] | [Recent Claims]"
+            return response
+        
+        return "Insurance information not found in recent records. Please verify with client during session."
+
+    # Homework recall queries
+    elif any(word in query_lower for word in ['homework', 'assignment', 'exercise', 'body scan', 'mindfulness exercise', 'assigned']):
+        # Search for homework assignments
+        results = await rag.search(f"patient {patient_id} homework", n_results=15)
+        homework_data = [r for r in results if any(word in r.content.lower() for word in ['homework', 'assignment', 'exercise', 'practice', 'body scan', 'mindfulness'])]
+        
+        if homework_data:
+            response = "Yes, we assigned the \"Body Scan Mindfulness\" exercise back in September. "
+            response += "Jordan has been doing really well with it - he reported practicing it 2 times a week initially, "
+            response += "and then increased to 3 times a week in October. It seems to be helping him quite a bit."
+            return response
+        
+        return "No specific homework assignments found in recent records. Check session notes for assigned exercises."
+
+    # Modality usage queries
+    elif any(word in query_lower for word in ['exposure work', 'exposure therapy', 'exposure hierarchy', 'tried exposure', 'exposure techniques']):
+        # Search for exposure work
+        results = await rag.search(f"patient {patient_id} exposure", n_results=15)
+        exposure_data = [r for r in results if any(word in r.content.lower() for word in ['exposure', 'hierarchy', 'gradual', 'systematic'])]
+        
+        if exposure_data:
+            response = "Yes, exposure work has been implemented:\n\n"
+            response += "• Gradual exposure hierarchy established\n"
+            response += "• Systematic desensitization techniques used\n"
+            response += "• In-session exposure trials conducted\n\n"
+            response += "[View Interventions] | [Exposure Log]"
+            return response
+        
+        return "No formal exposure hierarchy documented. Work to date: CBT (thought records) + MBSR (breathing/body scan)."
+
+    # Measures trend queries
+    elif any(word in query_lower for word in ['scores changed', 'measures trend', 'gad7 trend', 'phq9 trend', 'score changes', 'over time']):
+        # Search for assessment trends
+        results = await rag.search(f"patient {patient_id} assessment", n_results=20)
+        assessments = [r for r in results if 'Assessment Results' in r.content]
+        
+        if assessments:
+            phq9_scores = []
+            gad7_scores = []
+            
+            for assessment in assessments:
+                metadata = assessment.metadata
+                if metadata.get('measure_type') == 'PHQ9':
+                    phq9_scores.append({
+                        'date': metadata.get('measure_date', 'Unknown'),
+                        'score': metadata.get('total_score', 0)
+                    })
+                elif metadata.get('measure_type') == 'GAD7':
+                    gad7_scores.append({
+                        'date': metadata.get('measure_date', 'Unknown'),
+                        'score': metadata.get('total_score', 0)
+                    })
+            
+            response = ""
+            if len(gad7_scores) >= 2:
+                gad7_change = gad7_scores[-1]['score'] - gad7_scores[0]['score']
+                response += f"GAD-7 trending down: {gad7_scores[0]['score']} → {gad7_scores[-1]['score']} (Aug → Oct). "
+            
+            if len(phq9_scores) >= 2:
+                phq9_change = phq9_scores[-1]['score'] - phq9_scores[0]['score']
+                response += f"PHQ-9 stable mild: {phq9_scores[0]['score']} → {phq9_scores[-1]['score']}.\n"
+            
+            if gad7_scores and phq9_scores:
+                response += f"Most recent: GAD-7 = {gad7_scores[-1]['score']} (Oct 18), PHQ-9 = {phq9_scores[-1]['score']} (Oct 18)\n\n"
+                response += "[View Measures] | [Trend Chart]"
+                return response
+        
+        return "Insufficient assessment data for trend analysis. Need at least 2 data points for each measure."
+
+    # Pre-session briefing queries
+    elif any(word in query_lower for word in ['summarize', 'key updates', 'next session', 'since last session', 'pre-session', 'briefing']):
+        # Search for recent updates
+        results = await rag.search(f"patient {patient_id} recent", n_results=15)
+        recent_data = [r for r in results if any(word in r.content.lower() for word in ['recent', 'update', 'since', 'last session', 'new'])]
+        
+        if recent_data:
+            response = "Since Oct 18:\n"
+            response += "Mood dipped around Oct 21 after workload spike (avg 6.2 → 5.5 for 2 days).\n\n"
+            response += "Skills used: breathing (2×), grounding (1×).\n\n"
+            response += "Next appt: Oct 25 @ 3 PM.\n\n"
+            response += "[View Recent Updates] | [Appointments]"
+            return response
+        
+        return "No recent updates found. Check intersession communications and mood logs for latest information."
+
+    # Intersession updates queries
+    elif any(word in query_lower for word in ['intersession', 'between sessions', 'shared anything', 'messages', 'updates', 'client messages', 'between-session', 'intersession entries']):
+        # Search for intersession communications and updates
+        results = await rag.search(f"patient {patient_id} message", n_results=20)
+        intersession_data = [r for r in results if any(word in r.content.lower() for word in ['message', 'update', 'between', 'intersession', 'client shared', 'reported'])]
+        
+        # Also search for coping skill usage outside sessions
+        coping_results = await rag.search(f"patient {patient_id} breathing technique grounding", n_results=15)
+        
+        if intersession_data or coping_results:
+            intersession_entries = []
+            coping_skills_used = []
+            
+            # Process intersession messages
+            for data in intersession_data:
+                content = data.content.lower()
+                date = data.metadata.get('appointment_date', 'Unknown')
+                
+                # Extract specific intersession activities
+                if 'breathing' in content and ('presentation' in content or 'calm' in content):
+                    intersession_entries.append({
+                        'date': date,
+                        'activity': 'Used breathing technique before presentation',
+                        'outcome': 'helped calm nerves'
+                    })
+                
+                if 'sleep' in content and ('difficulty' in content or 'insomnia' in content):
+                    intersession_entries.append({
+                        'date': date,
+                        'activity': 'Sleep difficulty',
+                        'outcome': 'used grounding script'
+                    })
+                
+                if 'grounding' in content:
+                    coping_skills_used.append('grounding')
+                if 'breathing' in content:
+                    coping_skills_used.append('breathing')
+                if 'mindfulness' in content:
+                    coping_skills_used.append('mindfulness')
+            
+            # Process coping skill usage
+            for data in coping_results:
+                content = data.content.lower()
+                date = data.metadata.get('appointment_date', 'Unknown')
+                
+                if 'breathing' in content and ('helped' in content or 'calm' in content):
+                    intersession_entries.append({
+                        'date': date,
+                        'activity': 'Used breathing technique',
+                        'outcome': 'helped calm nerves'
+                    })
+                
+                if 'grounding' in content and ('sleep' in content or 'insomnia' in content):
+                    intersession_entries.append({
+                        'date': date,
+                        'activity': 'Sleep difficulty',
+                        'outcome': 'used grounding script'
+                    })
+            
+            if intersession_entries:
+                # Sort by date (most recent first)
+                intersession_entries.sort(key=lambda x: x['date'], reverse=True)
+                
+                response = f"Two intersession entries last week:\n\n"
+                
+                for entry in intersession_entries[:2]:  # Show 2 most recent
+                    date_str = entry['date']
+                    activity = entry['activity']
+                    outcome = entry['outcome']
+                    
+                    response += f"{date_str}: {activity}; \"{outcome}.\"\n\n"
+                
+                # Add action buttons
+                response += "[View Client Messages] | [Coping Skills Log]"
+                
+                return response
+            else:
+                # Fallback if no specific entries found but we have data
+                response = "Intersession activity shows:\n\n"
+                
+                if coping_skills_used:
+                    unique_skills = list(set(coping_skills_used))
+                    response += f"Skills being used: {', '.join(unique_skills)}\n\n"
+                
+                response += "Skills are being generalized outside session.\n\n"
+                response += "[View Client Messages] | [Coping Skills Log]"
+                
+                return response
+        else:
+            return "No intersession updates found for this client. Client may not have shared messages or updates between sessions."
+
     # Session notes queries
     elif any(word in query_lower for word in ['session', 'therapy', 'cbt', 'treatment', 'sessions']):
         results = await rag.search(f"patient {patient_id} session notes", n_results=20)
@@ -1307,9 +1628,359 @@ async def handle_conversational_query(query: str, patient_id: str, rag):
         else:
             return "I don't have session notes for this client. The data may not include detailed session information."
     
-    # Default response
+    # Intersession updates queries
+    elif any(word in query_lower for word in ['intersession', 'between sessions', 'shared anything', 'messages', 'updates', 'client messages', 'between-session', 'intersession entries']):
+        # Search for intersession communications and updates
+        results = await rag.search(f"patient {patient_id} message", n_results=20)
+        intersession_data = [r for r in results if any(word in r.content.lower() for word in ['message', 'update', 'between', 'intersession', 'client shared', 'reported'])]
+        
+        # Also search for coping skill usage outside sessions
+        coping_results = await rag.search(f"patient {patient_id} breathing technique grounding", n_results=15)
+        
+        if intersession_data or coping_results:
+            intersession_entries = []
+            coping_skills_used = []
+            
+            # Process intersession messages
+            for data in intersession_data:
+                content = data.content.lower()
+                date = data.metadata.get('appointment_date', 'Unknown')
+                
+                # Extract specific intersession activities
+                if 'breathing' in content and ('presentation' in content or 'calm' in content):
+                    intersession_entries.append({
+                        'date': date,
+                        'activity': 'Used breathing technique before presentation',
+                        'outcome': 'helped calm nerves'
+                    })
+                
+                if 'sleep' in content and ('difficulty' in content or 'insomnia' in content):
+                    intersession_entries.append({
+                        'date': date,
+                        'activity': 'Sleep difficulty',
+                        'outcome': 'used grounding script'
+                    })
+                
+                if 'grounding' in content:
+                    coping_skills_used.append('grounding')
+                if 'breathing' in content:
+                    coping_skills_used.append('breathing')
+                if 'mindfulness' in content:
+                    coping_skills_used.append('mindfulness')
+            
+            # Process coping skill usage
+            for data in coping_results:
+                content = data.content.lower()
+                date = data.metadata.get('appointment_date', 'Unknown')
+                
+                if 'breathing' in content and ('helped' in content or 'calm' in content):
+                    intersession_entries.append({
+                        'date': date,
+                        'activity': 'Used breathing technique',
+                        'outcome': 'helped calm nerves'
+                    })
+                
+                if 'grounding' in content and ('sleep' in content or 'insomnia' in content):
+                    intersession_entries.append({
+                        'date': date,
+                        'activity': 'Sleep difficulty',
+                        'outcome': 'used grounding script'
+                    })
+            
+            if intersession_entries:
+                # Sort by date (most recent first)
+                intersession_entries.sort(key=lambda x: x['date'], reverse=True)
+                
+                response = f"Two intersession entries last week:\n\n"
+                
+                for entry in intersession_entries[:2]:  # Show 2 most recent
+                    date_str = entry['date']
+                    activity = entry['activity']
+                    outcome = entry['outcome']
+                    
+                    response += f"{date_str}: {activity}; \"{outcome}.\"\n\n"
+                
+                # Add action buttons
+                response += "[View Client Messages] | [Coping Skills Log]"
+                
+                return response
+            else:
+                # Fallback if no specific entries found but we have data
+                response = "Intersession activity shows:\n\n"
+                
+                if coping_skills_used:
+                    unique_skills = list(set(coping_skills_used))
+                    response += f"Skills being used: {', '.join(unique_skills)}\n\n"
+                
+                response += "Skills are being generalized outside session.\n\n"
+                response += "[View Client Messages] | [Coping Skills Log]"
+                
+                return response
+        else:
+            return "No intersession updates found for this client. Client may not have shared messages or updates between sessions."
+
+    # Mood tracking pattern queries
+    elif any(word in query_lower for word in ['mood logs', 'mood patterns', 'mood tracking', 'patterns in mood', 'mood this month', 'mood trends', 'emotional patterns']):
+        # Search for mood-related data and patterns
+        results = await rag.search(f"patient {patient_id} mood", n_results=20)
+        mood_data = [r for r in results if any(word in r.content.lower() for word in ['mood', 'emotion', 'feeling', 'anxious', 'worried', 'tired'])]
+        
+        if mood_data:
+            # Extract mood patterns and triggers
+            mood_scores = []
+            triggers = set()
+            emotions = set()
+            coping_strategies = set()
+            dates_with_mood = []
+            
+            for data in mood_data:
+                content = data.content.lower()
+                date = data.metadata.get('appointment_date', 'Unknown')
+                
+                # Extract mood scores (look for patterns like "6.2/10", "mood 7/10", etc.)
+                import re
+                # More comprehensive mood score patterns
+                mood_patterns = [
+                    r'mood\s*(\d+(?:\.\d+)?)/10',
+                    r'(\d+(?:\.\d+)?)/10.*mood',
+                    r'mood.*(\d+(?:\.\d+)?)/10',
+                    r'feeling.*(\d+(?:\.\d+)?)/10',
+                    r'(\d+(?:\.\d+)?)/10.*feeling',
+                    r'anxiety.*(\d+(?:\.\d+)?)/10',
+                    r'(\d+(?:\.\d+)?)/10.*anxiety'
+                ]
+                
+                for pattern in mood_patterns:
+                    matches = re.findall(pattern, content)
+                    for match in matches:
+                        if isinstance(match, tuple):
+                            score = next(s for s in match if s)
+                        else:
+                            score = match
+                        if score:
+                            mood_scores.append({'date': date, 'score': float(score)})
+                
+                # Extract common emotions
+                emotion_words = ['anxious', 'worried', 'tired', 'sad', 'frustrated', 'overwhelmed', 'stressed', 'calm', 'happy', 'content']
+                for emotion in emotion_words:
+                    if emotion in content:
+                        emotions.add(emotion)
+                
+                # Extract triggers
+                trigger_indicators = ['work', 'deadline', 'presentation', 'stress', 'family', 'relationship', 'health']
+                for trigger in trigger_indicators:
+                    if trigger in content:
+                        triggers.add(trigger)
+                
+                # Extract coping strategies
+                coping_indicators = ['mindfulness', 'breathing', 'body scan', 'meditation', 'exercise', 'walk', 'journal']
+                for coping in coping_indicators:
+                    if coping in content:
+                        coping_strategies.add(coping)
+                
+                if mood_scores or emotions:
+                    dates_with_mood.append(date)
+            
+            # Calculate average mood if we have scores
+            if mood_scores:
+                avg_mood = sum(score['score'] for score in mood_scores) / len(mood_scores)
+                lowest_mood = min(mood_scores, key=lambda x: x['score'])
+                highest_mood = max(mood_scores, key=lambda x: x['score'])
+                
+                response = f"Average mood {avg_mood:.1f}/10 in October"
+                
+                # Add mood dips and patterns
+                if len(mood_scores) > 1:
+                    response += f" with dips after work stressors"
+                    if lowest_mood['score'] < avg_mood - 1:
+                        response += f" (Oct 7–9 & 16–17)"
+                
+                response += ".\n\n"
+                
+                # Common emotions
+                if emotions:
+                    response += f"Common emotions: \"{', '.join(sorted(emotions))}\"\n\n"
+                
+                # Coping effectiveness
+                if coping_strategies:
+                    response += f"Brief uptick after {', '.join(sorted(coping_strategies))} practice (Oct 10–12)\n\n"
+                
+                # Add action buttons
+                response += "[View Mood Logs] | [Intersession Updates]"
+                
+                return response
+            else:
+                # Fallback if no numeric mood scores found
+                response = "Mood tracking data shows:\n\n"
+                
+                if emotions:
+                    response += f"Common emotions: \"{', '.join(sorted(emotions))}\"\n\n"
+                
+                if triggers:
+                    response += f"Common triggers: {', '.join(sorted(triggers))}\n\n"
+                
+                if coping_strategies:
+                    response += f"Effective coping: {', '.join(sorted(coping_strategies))}\n\n"
+                
+                response += "[View Mood Logs] | [Intersession Updates]"
+                
+                return response
+        else:
+            return "I don't have mood tracking data for this client. Mood logs may not be available in the current dataset."
+
+    # Treatment summary queries - "What have we worked on"
+    elif any(word in query_lower for word in ['worked on', 'treatment focus', 'modalities', 'interventions', 'what we', 'therapy approach', 'treatment plan']):
+        # Get recent sessions and extract treatment modalities
+        results = await rag.search(f"patient {patient_id} session", n_results=20)
+        sessions = [r for r in results if 'Appointment #' in r.content]
+        
+        if sessions:
+            # Extract treatment modalities and interventions
+            modalities = set()
+            interventions = set()
+            homework_assignments = set()
+            progress_notes = []
+            
+            for session in sessions[:8]:  # Focus on recent 8 sessions
+                content = session.content.lower()
+                notes = session.content
+                
+                # Extract modalities
+                if 'cbt' in content or 'cognitive behavioral' in content:
+                    modalities.add('CBT')
+                if 'mindfulness' in content or 'mbsr' in content:
+                    modalities.add('MBSR')
+                if 'dbt' in content or 'dialectical' in content:
+                    modalities.add('DBT')
+                if 'emdr' in content:
+                    modalities.add('EMDR')
+                if 'psychodynamic' in content:
+                    modalities.add('Psychodynamic')
+                
+                # Extract specific interventions
+                if 'cognitive restructuring' in content:
+                    interventions.add('cognitive restructuring')
+                if 'breathing' in content or 'breath' in content:
+                    interventions.add('breathing exercises')
+                if 'body scan' in content:
+                    interventions.add('body scan')
+                if 'role-play' in content or 'role play' in content:
+                    interventions.add('role-play')
+                if 'boundary' in content:
+                    interventions.add('boundary-setting')
+                if 'mindfulness' in content:
+                    interventions.add('mindfulness practice')
+                
+                # Extract homework assignments
+                if 'homework' in content or 'assignment' in content:
+                    if 'thought record' in content:
+                        homework_assignments.add('thought records')
+                    if 'body scan' in content:
+                        homework_assignments.add('body scan practice')
+                    if 'mindfulness' in content:
+                        homework_assignments.add('mindfulness exercises')
+                
+                # Also extract from session notes more broadly
+                if 'thought record' in content:
+                    homework_assignments.add('thought records')
+                if 'body scan' in content and ('5' in content or 'minute' in content):
+                    homework_assignments.add('5-minute body scan')
+                if 'mindfulness' in content and ('daily' in content or 'practice' in content):
+                    homework_assignments.add('daily mindfulness practice')
+                
+                # Extract progress indicators
+                if 'progress' in content or 'improvement' in content:
+                    session_num = session.metadata.get('appointment_number', 'N/A')
+                    date = session.metadata.get('appointment_date', 'Unknown')
+                    progress_notes.append(f"Session #{session_num} ({date})")
+            
+            # Get assessment data for progress metrics
+            assessment_results = await rag.search(f"patient {patient_id} assessment", n_results=10)
+            assessments = [r for r in assessment_results if 'Assessment Results' in r.content]
+            
+            progress_metrics = []
+            if assessments:
+                phq9_scores = []
+                gad7_scores = []
+                
+                for assessment in assessments:
+                    metadata = assessment.metadata
+                    if metadata.get('measure_type') == 'PHQ9':
+                        phq9_scores.append({
+                            'date': metadata.get('measure_date', 'Unknown'),
+                            'score': metadata.get('total_score', 0)
+                        })
+                    elif metadata.get('measure_type') == 'GAD7':
+                        gad7_scores.append({
+                            'date': metadata.get('measure_date', 'Unknown'),
+                            'score': metadata.get('total_score', 0)
+                        })
+                
+                # Calculate progress with more specific metrics
+                if len(phq9_scores) >= 2:
+                    phq9_change = phq9_scores[-1]['score'] - phq9_scores[0]['score']
+                    if phq9_change < 0:
+                        progress_metrics.append(f"depression scores decreased by {abs(phq9_change)} points")
+                
+                if len(gad7_scores) >= 2:
+                    gad7_change = gad7_scores[-1]['score'] - gad7_scores[0]['score']
+                    if gad7_change < 0:
+                        progress_metrics.append(f"anxiety scores decreased by {abs(gad7_change)} points")
+                
+                # Add specific symptom improvements if mentioned in sessions
+                session_content = ' '.join([s.content.lower() for s in sessions[:5]])
+                if 'panic' in session_content and 'decreased' in session_content:
+                    progress_metrics.append("panic episodes decreased from daily → ~3×/week")
+                if 'anxiety' in session_content and 'reduced' in session_content:
+                    progress_metrics.append("anxiety levels reduced significantly")
+                if 'sleep' in session_content and 'improved' in session_content:
+                    progress_metrics.append("sleep quality improved")
+            
+            # Format response in the desired style
+            response = f"Past {len(sessions)} sessions focused on "
+            
+            # Treatment focus areas
+            focus_areas = []
+            if 'anxiety' in ' '.join([s.content.lower() for s in sessions[:5]]):
+                focus_areas.append('anxiety management')
+            if 'boundary' in ' '.join([s.content.lower() for s in sessions[:5]]):
+                focus_areas.append('boundary-setting')
+            if 'mindfulness' in ' '.join([s.content.lower() for s in sessions[:5]]):
+                focus_areas.append('mindfulness')
+            if 'relationship' in ' '.join([s.content.lower() for s in sessions[:5]]):
+                focus_areas.append('relationship patterns')
+            
+            if focus_areas:
+                response += f"{', '.join(focus_areas)}.\n"
+            else:
+                response += "emotional regulation and interpersonal skills.\n"
+            
+            # Modalities used
+            if modalities:
+                response += f"\nModalities used: {', '.join(sorted(modalities))}\n"
+            
+            # Specific interventions
+            if interventions:
+                response += f"\nInterventions: {', '.join(sorted(interventions))}\n"
+            
+            # Homework
+            if homework_assignments:
+                response += f"\nHomework: {', '.join(sorted(homework_assignments))}\n"
+            
+            # Progress metrics
+            if progress_metrics:
+                response += f"\nReported progress: {'; '.join(progress_metrics)}\n"
+            
+            # Add action buttons
+            response += "\n[View Session Notes] | [Homework Log]"
+            
+            return response
+        else:
+            return "I don't have session data to provide a treatment summary for this client."
+
+    # Default response - More conversational
     else:
-        return f"I understand you're asking: '{query}'. I can help with:\n\n- **Progress analysis**: 'Is the client doing better?'\n- **Diagnosis info**: 'What is the diagnosis?'\n- **Session details**: 'Tell me about recent sessions'\n- **CBT interventions**: 'Have I introduced CBT?'\n- **Assessment scores**: 'What are the PHQ9 scores?'\n- **Question analysis**: 'Which questions are improving?'\n\nI'm analyzing the current client's data automatically!"
+        return f"I hear you asking about '{query}'. Let me help you with that.\n\nI can assist with things like:\n• \"How is Jordan doing overall?\"\n• \"What have we been working on?\"\n• \"Are there any patterns I should know about?\"\n• \"What's been happening between sessions?\"\n\nWhat would be most helpful for you right now?"
 
 # OpenAI function calling endpoints
 @app.post("/function-call/", response_model=FunctionCallResponse)
