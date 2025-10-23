@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #F8F7F5;
+            background: #F8F8F8;
             min-height: 100vh;
             display: flex;
         }
@@ -21,7 +21,7 @@
         /* Sidebar Navigation */
         .sidebar {
             width: 280px;
-            background: #F8F7F5;
+            background: #F8F8F8;
             border-right: 1px solid #E5E5E5;
             padding: 20px 0;
             position: fixed;
@@ -59,9 +59,9 @@
         }
 
         .nav-item.active {
-            background: #8A2BE2;
+            background: #8A63D2;
             color: #FFFFFF;
-            border-left-color: #8A2BE2;
+            border-left-color: #8A63D2;
         }
 
         .nav-item i {
@@ -92,7 +92,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #8A2BE2;
+            background: #8A63D2;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -120,13 +120,13 @@
         .main-content {
             flex: 1;
             margin-left: 280px;
-            background: #F8F7F5;
+            background: #F8F8F8;
             min-height: 100vh;
         }
 
         /* Header */
         .header {
-            background: #F8F7F5;
+            background: #F8F8F8;
             padding: 30px;
             border-bottom: 1px solid #E5E5E5;
         }
@@ -139,7 +139,7 @@
         }
 
         .back-link {
-            color: #8A2BE2;
+            color: #8A63D2;
             text-decoration: none;
             font-size: 0.95rem;
             font-weight: 500;
@@ -233,18 +233,18 @@
         }
 
         .toggle-btn.active {
-            background: #8A2BE2;
+            background: #8A63D2;
             color: #FFFFFF;
-            border-color: #8A2BE2;
+            border-color: #8A63D2;
         }
 
         .toggle-btn:hover {
-            border-color: #8A2BE2;
+            border-color: #8A63D2;
         }
 
         /* Provider Copilot Chat Interface */
         .chat-container {
-            background: #F8F7F5;
+            background: #F8F8F8;
             border-radius: 12px;
             padding: 20px;
             margin-top: 20px;
@@ -313,7 +313,7 @@
         }
 
         .user-message .message-bubble {
-            background: #8A2BE2;
+            background: #8A63D2;
             color: #FFFFFF;
             border-bottom-right-radius: 4px;
         }
@@ -342,7 +342,7 @@
         }
 
         .chat-input:focus {
-            border-color: #8A2BE2;
+            border-color: #8A63D2;
         }
 
         .chat-input::placeholder {
@@ -411,14 +411,14 @@
         }
 
         .question-btn:hover {
-            background: #8A2BE2;
+            background: #8A63D2;
             color: #FFFFFF;
-            border-color: #8A2BE2;
+            border-color: #8A63D2;
         }
 
         /* Visualization Section */
         .visualization-section {
-            background: #F8F7F5;
+            background: #F8F8F8;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
@@ -451,9 +451,9 @@
         }
 
         .viz-btn:hover {
-            background: #8A2BE2;
+            background: #8A63D2;
             color: #FFFFFF;
-            border-color: #8A2BE2;
+            border-color: #8A63D2;
             transform: translateY(-1px);
         }
 
@@ -470,7 +470,7 @@
         }
 
         .feature-card {
-            background: #F8F7F5;
+            background: #F8F8F8;
             border: 1px solid #E5E5E5;
             border-radius: 8px;
             padding: 20px;
@@ -565,7 +565,7 @@
             </a>
             <a href="#" class="nav-item">
                 Community
-                <i class="external-icon">↗️</i>
+                <i class="external-icon"></i>
             </a>
         </nav>
 
@@ -587,7 +587,7 @@
         <div class="header">
             <div class="header-top">
                 <a href="#" class="back-link">
-                    <i>←</i>
+                    <i></i>
                     Back to Dashboard
                 </a>
             </div>
@@ -609,17 +609,17 @@
                     <div class="feature-description">Get intelligent insights on patient progress, treatment effectiveness, and clinical recommendations</div>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📊</div>
+                    <div class="feature-icon"></div>
                     <div class="feature-title">Assessment Tracking</div>
                     <div class="feature-description">Analyze PHQ9 and GAD7 scores with detailed question-level breakdowns and trends</div>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">💬</div>
+                    <div class="feature-icon"></div>
                     <div class="feature-title">Natural Language</div>
                     <div class="feature-description">Ask questions in plain English about your patients and get comprehensive, contextual answers</div>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
+                    <div class="feature-icon"></div>
                     <div class="feature-title">Treatment Insights</div>
                     <div class="feature-description">Understand which interventions are working and get suggestions for continued care</div>
                 </div>
@@ -630,8 +630,8 @@
                 <div class="card-header">
                     <h2 class="card-title">Provider Copilot</h2>
                     <div class="view-toggles">
-                        <button class="toggle-btn active">💬</button>
-                        <button class="toggle-btn">📊</button>
+                        <button class="toggle-btn active"></button>
+                        <button class="toggle-btn"></button>
                     </div>
                 </div>
 
@@ -692,7 +692,7 @@
                             autocomplete="off"
                         >
                         <button class="send-btn" id="sendBtn" onclick="handleSubmit()">
-                            ✈️
+                            Send
                         </button>
                     </div>
                 </div>

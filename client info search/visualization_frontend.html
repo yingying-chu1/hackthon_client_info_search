@@ -14,7 +14,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #F8F7F5;
+            background: #F8F8F8;
             min-height: 100vh;
             display: flex;
         }
@@ -22,7 +22,7 @@
         /* Sidebar Navigation */
         .sidebar {
             width: 280px;
-            background: #F8F7F5;
+            background: #F8F8F8;
             border-right: 1px solid #E5E5E5;
             padding: 20px 0;
             position: fixed;
@@ -60,9 +60,9 @@
         }
 
         .nav-item.active {
-            background: #8A2BE2;
+            background: #8A63D2;
             color: #FFFFFF;
-            border-left-color: #8A2BE2;
+            border-left-color: #8A63D2;
         }
 
         .nav-item i {
@@ -88,7 +88,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #8A2BE2;
+            background: #8A63D2;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -116,13 +116,13 @@
         .main-content {
             flex: 1;
             margin-left: 280px;
-            background: #F8F7F5;
+            background: #F8F8F8;
             min-height: 100vh;
         }
 
         /* Header */
         .header {
-            background: #F8F7F5;
+            background: #F8F8F8;
             padding: 30px;
             border-bottom: 1px solid #E5E5E5;
         }
@@ -135,7 +135,7 @@
         }
 
         .back-link {
-            color: #8A2BE2;
+            color: #8A63D2;
             text-decoration: none;
             font-size: 0.95rem;
             font-weight: 500;
@@ -226,7 +226,7 @@
 
         .control-select:focus {
             outline: none;
-            border-color: #8A2BE2;
+            border-color: #8A63D2;
         }
 
         .control-select option {
@@ -298,7 +298,7 @@
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #8A2BE2;
+            color: #8A63D2;
             margin-bottom: 5px;
         }
 
@@ -369,37 +369,37 @@
         
         <nav>
             <a href="#" class="nav-item">
-                <i>🏠</i>
+                <i></i>
                 Dashboard
             </a>
             <a href="#" class="nav-item">
-                <i>📊</i>
+                <i></i>
                 Insights
             </a>
             <a href="#" class="nav-item">
-                <i>💬</i>
+                <i></i>
                 Messages
             </a>
             <a href="#" class="nav-item active">
-                <i>👤</i>
+                <i></i>
                 Clients
             </a>
             <a href="#" class="nav-item">
-                <i>📅</i>
+                <i></i>
                 Appointments
             </a>
             <a href="#" class="nav-item">
-                <i>💰</i>
+                <i></i>
                 Payouts
             </a>
             <a href="#" class="nav-item">
-                <i>⚙️</i>
+                <i></i>
                 Profile
             </a>
             <a href="#" class="nav-item">
-                <i>👥</i>
+                <i></i>
                 Community
-                <i class="external-icon">↗️</i>
+                <i class="external-icon"></i>
             </a>
         </nav>
 
@@ -421,7 +421,7 @@
         <div class="header">
             <div class="header-top">
                 <a href="client_ai_assistant.html" class="back-link">
-                    <i>←</i>
+                    <i></i>
                     Back to Provider Copilot
                 </a>
             </div>
@@ -585,7 +585,7 @@
                     <div class="stat-value">${latestScore}</div>
                     <div class="stat-label">Current Score</div>
                     <div class="stat-trend ${change < 0 ? 'positive' : change > 0 ? 'negative' : 'neutral'}">
-                        ${change < 0 ? '↓' : change > 0 ? '↑' : '→'} ${Math.abs(change)} from last assessment
+                        ${change < 0 ? 'Decreased' : change > 0 ? 'Increased' : 'No change'} ${Math.abs(change)} from last assessment
                     </div>
                 </div>
                 <div class="stat-card">
@@ -616,7 +616,7 @@
                     datasets: [{
                         label: `${assessmentType.toUpperCase()} Score`,
                         data: data.scores,
-                        borderColor: '#8A2BE2',
+                        borderColor: '#8A63D2',
                         backgroundColor: 'rgba(138, 43, 226, 0.1)',
                         borderWidth: 3,
                         fill: true,
@@ -711,12 +711,12 @@
                             datasets: [{
                                 label: `Score`,
                                 data: data.questionScores[index],
-                                borderColor: '#8A2BE2',
+                                borderColor: '#8A63D2',
                                 backgroundColor: 'rgba(138, 43, 226, 0.1)',
                                 borderWidth: 2,
                                 fill: true,
                                 tension: 0.4,
-                                pointBackgroundColor: '#8A2BE2',
+                                pointBackgroundColor: '#8A63D2',
                                 pointBorderColor: '#FFFFFF',
                                 pointBorderWidth: 2,
                                 pointRadius: 4
